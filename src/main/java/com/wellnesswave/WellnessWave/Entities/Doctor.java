@@ -2,15 +2,13 @@ package com.wellnesswave.WellnessWave.Entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-
 @Entity
 @Table(name = "doctor")
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int docId;
-    private String fisrtName;
+    private String firstName;
     private String lastName;
     private String phoneNum;
     private String email;
@@ -18,12 +16,16 @@ public class Doctor {
     private String profession;
     private String amka;
     private String password;
+    //Foreign key
+    private int diagnId;
+    //Foreign key
+    private int appointmentId;
     private String docUsername;
 
 
     public Doctor(int docId, String fisrtName, String lastName, String phoneNum, String email, String address, String profession, String amka, String password) {
         this.docId = docId;
-        this.fisrtName = fisrtName;
+        this.firstName = fisrtName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.email = email;
@@ -34,7 +36,7 @@ public class Doctor {
     }
 
     public Doctor(String fisrtName, String lastName, String phoneNum, String email, String address, String profession, String amka, String password) {
-        this.fisrtName = fisrtName;
+        this.firstName = fisrtName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.email = email;
@@ -52,12 +54,12 @@ public class Doctor {
         this.docId = docId;
     }
 
-    public String getFisrtName() {
-        return fisrtName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFisrtName(String fisrtName) {
-        this.fisrtName = fisrtName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -116,11 +118,36 @@ public class Doctor {
         this.password = password;
     }
 
+    public String getDocUsername() {
+        return docUsername;
+    }
+
+    public void setDocUsername(String docUsername) {
+        this.docUsername = docUsername;
+    }
+
+
+    public int getDiagnId() {
+        return diagnId;
+    }
+
+    public void setDiagnId(int diagnId) {
+        this.diagnId = diagnId;
+    }
+
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
     @Override
     public String toString() {
         return "Doctor{" +
                 "docId=" + docId +
-                ", fisrtName='" + fisrtName + '\'' +
+                ", fisrtName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", email='" + email + '\'' +

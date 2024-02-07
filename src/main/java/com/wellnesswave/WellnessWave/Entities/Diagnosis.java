@@ -1,6 +1,5 @@
 package com.wellnesswave.WellnessWave.Entities;
 
-import com.fasterxml.jackson.databind.DatabindException;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -11,8 +10,10 @@ public class Diagnosis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int diagnosisId;
+    //Foreign key
     private int docId;
-    private int patId;
+    //Foreign key
+    private int patientId;
     private String diagnInfo;
     private String diagnType;
     private String treatment;
@@ -24,7 +25,7 @@ public class Diagnosis {
     public Diagnosis(int diagnosisId, int docId, int patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
         this.diagnosisId = diagnosisId;
         this.docId = docId;
-        this.patId = patId;
+        this.patientId = patId;
         this.diagnInfo = diagnInfo;
         this.diagnType = diagnType;
         this.treatment = treatment;
@@ -36,7 +37,7 @@ public class Diagnosis {
 
     public Diagnosis(int docId, int patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
         this.docId = docId;
-        this.patId = patId;
+        this.patientId = patId;
         this.diagnInfo = diagnInfo;
         this.diagnType = diagnType;
         this.treatment = treatment;
@@ -62,12 +63,12 @@ public class Diagnosis {
         this.docId = docId;
     }
 
-    public int getPatId() {
-        return patId;
+    public int getPatientId() {
+        return patientId;
     }
 
-    public void setPatId(int patId) {
-        this.patId = patId;
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
     }
 
     public String getDiagnInfo() {
@@ -131,7 +132,7 @@ public class Diagnosis {
         return "Diagnosis{" +
                 "diagnosisId=" + diagnosisId +
                 ", docId=" + docId +
-                ", patId=" + patId +
+                ", patId=" + patientId +
                 ", diagnInfo='" + diagnInfo + '\'' +
                 ", diagnType='" + diagnType + '\'' +
                 ", treatment='" + treatment + '\'' +

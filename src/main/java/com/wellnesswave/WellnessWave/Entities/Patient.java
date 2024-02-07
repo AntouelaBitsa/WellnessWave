@@ -2,25 +2,28 @@ package com.wellnesswave.WellnessWave.Entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-
 @Entity
 @Table(name = "patient")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int patientId;
-    private String fisrtName;
+    private String firstName;
     private String lastName;
     private String phoneNum;
     private String email;
     private String dob; //date of birth
     private String patAmka;
     private String patPassword;
+    //Foreign key
+    private int appId;
+    //Foreign key
+    private int diagnId;
+    private String patUsername;
 
     public Patient(int patientId, String fisrtName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword) {
         this.patientId = patientId;
-        this.fisrtName = fisrtName;
+        this.firstName = fisrtName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.email = email;
@@ -30,7 +33,7 @@ public class Patient {
     }
 
     public Patient(String fisrtName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword) {
-        this.fisrtName = fisrtName;
+        this.firstName = fisrtName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.email = email;
@@ -47,12 +50,12 @@ public class Patient {
         this.patientId = patientId;
     }
 
-    public String getFisrtName() {
-        return fisrtName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFisrtName(String fisrtName) {
-        this.fisrtName = fisrtName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -103,17 +106,44 @@ public class Patient {
         this.patPassword = patPassword;
     }
 
+    public int getAppId() {
+        return appId;
+    }
+
+    public void setAppId(int appId) {
+        this.appId = appId;
+    }
+
+    public int getDiagnId() {
+        return diagnId;
+    }
+
+    public void setDiagnId(int diagnId) {
+        this.diagnId = diagnId;
+    }
+
+    public String getPatUsername() {
+        return patUsername;
+    }
+
+    public void setPatUsername(String patUsername) {
+        this.patUsername = patUsername;
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
                 "patientId=" + patientId +
-                ", fisrtName='" + fisrtName + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", email='" + email + '\'' +
                 ", dob='" + dob + '\'' +
                 ", patAmka='" + patAmka + '\'' +
                 ", patPassword='" + patPassword + '\'' +
+                ", appId=" + appId +
+                ", diagnId=" + diagnId +
+                ", patUsername='" + patUsername + '\'' +
                 '}';
     }
 }

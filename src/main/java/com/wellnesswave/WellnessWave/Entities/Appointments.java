@@ -10,8 +10,10 @@ public class Appointments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int appointmentId;
+    //Foreign key
     private int docId;
-    private int patId;
+    //Foreign key
+    private int patientId;
     private Date date;
     private Date time;
     private String appointInfo;
@@ -19,7 +21,7 @@ public class Appointments {
     public Appointments(int appointmentId, int docId, int patId, Date date, Date time, String appointInfo) {
         this.appointmentId = appointmentId;
         this.docId = docId;
-        this.patId = patId;
+        this.patientId = patId;
         this.date = date;
         this.time = time;
         this.appointInfo = appointInfo;
@@ -27,7 +29,7 @@ public class Appointments {
 
     public Appointments(int docId, int patId, Date date, Date time, String appointInfo) {
         this.docId = docId;
-        this.patId = patId;
+        this.patientId = patId;
         this.date = date;
         this.time = time;
         this.appointInfo = appointInfo;
@@ -49,12 +51,12 @@ public class Appointments {
         this.docId = docId;
     }
 
-    public int getPatId() {
-        return patId;
+    public int getPatientId() {
+        return patientId;
     }
 
-    public void setPatId(int patId) {
-        this.patId = patId;
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
     }
 
     public Date getDate() {
@@ -86,7 +88,7 @@ public class Appointments {
         return "Appointments{" +
                 "appointmentId=" + appointmentId +
                 ", docId=" + docId +
-                ", patId=" + patId +
+                ", patId=" + patientId +
                 ", date=" + date +
                 ", time=" + time +
                 ", appointInfo='" + appointInfo + '\'' +
