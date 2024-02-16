@@ -11,14 +11,16 @@ public class Appointments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int appointmentId;
     //Foreign key
-    private int docId;
+//    @OneToOne
+    private Doctor docId;
     //Foreign key
-    private int patientId;
+//    @OneToOne
+    private Patient patientId;
     private Date date;
     private Date time;
     private String appointInfo;
 
-    public Appointments(int appointmentId, int docId, int patId, Date date, Date time, String appointInfo) {
+    public Appointments(int appointmentId, Doctor docId, Patient patId, Date date, Date time, String appointInfo) {
         this.appointmentId = appointmentId;
         this.docId = docId;
         this.patientId = patId;
@@ -27,7 +29,7 @@ public class Appointments {
         this.appointInfo = appointInfo;
     }
 
-    public Appointments(int docId, int patId, Date date, Date time, String appointInfo) {
+    public Appointments(Doctor docId, Patient patId, Date date, Date time, String appointInfo) {
         this.docId = docId;
         this.patientId = patId;
         this.date = date;
@@ -43,19 +45,19 @@ public class Appointments {
         this.appointmentId = appointmentId;
     }
 
-    public int getDocId() {
+    public Doctor getDocId() {
         return docId;
     }
 
-    public void setDocId(int docId) {
+    public void setDocId(Doctor docId) {
         this.docId = docId;
     }
 
-    public int getPatientId() {
+    public Patient getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(int patientId) {
+    public void setPatientId(Patient patientId) {
         this.patientId = patientId;
     }
 

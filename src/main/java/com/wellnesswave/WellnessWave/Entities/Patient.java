@@ -16,8 +16,10 @@ public class Patient {
     private String patAmka;
     private String patPassword;
     //Foreign key
+//    @OneToOne
     private int appId;
     //Foreign key
+//    @OneToOne
     private int diagnId;
     private String patUsername;
 

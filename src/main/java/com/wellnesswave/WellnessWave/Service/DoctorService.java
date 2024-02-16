@@ -28,9 +28,9 @@ public class DoctorService {
     }
 
     public Doctor createDoctor(Doctor doctor){
-        if(!doctorRep.findDocByEmail(doctor.getEmail())){
+       /* if(!doctorRep.findDocByEmail(doctor.getEmail())){
             throw new IllegalArgumentException("Email already exists");
-        }
+        }*/
         return doctorRep.save(doctor);
     }
 

@@ -11,9 +11,13 @@ public class Diagnosis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int diagnosisId;
     //Foreign key
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
     private int docId;
     //Foreign key
-    private int patientId;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
+    private Patient patientId;
     private String diagnInfo;
     private String diagnType;
     private String treatment;
@@ -22,7 +26,8 @@ public class Diagnosis {
     private Date startDate;
     private Date endDate;
 
-    public Diagnosis(int diagnosisId, int docId, int patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
+    public Diagnosis(int diagnosisId, int docId, Patient patId, String diagnInfo, String diagnType, String treatment, String treatmName,
+                     String treatmDose, Date startDate, Date endDate) {
         this.diagnosisId = diagnosisId;
         this.docId = docId;
         this.patientId = patId;
@@ -35,7 +40,7 @@ public class Diagnosis {
         this.endDate = endDate;
     }
 
-    public Diagnosis(int docId, int patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
+    public Diagnosis(int docId, Patient patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
         this.docId = docId;
         this.patientId = patId;
         this.diagnInfo = diagnInfo;
@@ -63,11 +68,11 @@ public class Diagnosis {
         this.docId = docId;
     }
 
-    public int getPatientId() {
+    public Patient getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(int patientId) {
+    public void setPatientId(Patient patientId) {
         this.patientId = patientId;
     }
 

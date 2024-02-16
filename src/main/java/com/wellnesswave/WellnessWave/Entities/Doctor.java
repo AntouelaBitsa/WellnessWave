@@ -10,13 +10,14 @@ public class Doctor {
     private int docId;
     private String firstName;
     private String lastName;
+    private String password;
     private String phoneNum;
     private String email;
+    private String amka;
     private String address;
     private String profession;
-    private String amka;
-    private String password;
     //Foreign key
+//    @OneToOne()
     private int diagnId;
     //Foreign key
     private int appointmentId;

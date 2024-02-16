@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DoctorRepository extends  JpaRepository<Doctor, Long>{
 //    CrudRepository<Doctor, Long>
-    boolean findDocByEmail(String email);
+   // boolean findDocByEmail(String email);
 }
