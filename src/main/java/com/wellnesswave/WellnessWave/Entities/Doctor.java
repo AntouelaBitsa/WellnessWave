@@ -7,52 +7,73 @@ import jakarta.persistence.*;
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int docId;
+    private Integer docId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private String phoneNum;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String amka;
+    @Column(nullable = false)
     private String address;
+    @Column(nullable = false)
     private String profession;
-    //Foreign key
-//    @OneToOne()
-    private int diagnId;
-    //Foreign key
-    private int appointmentId;
+    @Column(nullable = false)
     private String docUsername;
+    private int userType;
+
+    public Doctor() {
+    }
+
+    public Doctor(String firstName, String lastName, String password, String phoneNum, String email, String amka, String address, String profession, String docUsername, int userType) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.phoneNum = phoneNum;
+        this.email = email;
+        this.amka = amka;
+        this.address = address;
+        this.profession = profession;
+        this.docUsername = docUsername;
+        this.userType = userType;
+    }
+
+    public boolean hasEmptyOrNull(){
+        //returns true if one or more fields are empty or null
+//        if (firstName.isEmpty() || firstName.equals(null) || lastName.isEmpty() || lastName.equals(null) || password.isEmpty()
+//                || password.equals(null) || phoneNum.isEmpty() || phoneNum.equals(null) || email.isEmpty() || email.equals(null)
+//                || amka.isEmpty() || amka.equals(null) || address.isEmpty() || address.equals(null) || profession.isEmpty() || profession.equals(null)
+//                || docUsername.isEmpty() || docUsername.equals(null)){
+//            return true;
+//        }
+//        return false;
+        return firstName.isEmpty() || firstName.equals(null) || lastName.isEmpty() || lastName.equals(null) || password.isEmpty()
+                || password.equals(null) || phoneNum.isEmpty() || phoneNum.equals(null) || email.isEmpty() || email.equals(null)
+                || amka.isEmpty() || amka.equals(null) || address.isEmpty() || address.equals(null) || profession.isEmpty() || profession.equals(null)
+                || docUsername.isEmpty() || docUsername.equals(null);
+    }
 
 
-    public Doctor(int docId, String fisrtName, String lastName, String phoneNum, String email, String address, String profession, String amka, String password) {
+    //thodoris method style
+    public boolean hasEmptyOrNull2(){
+        boolean flag = false;
+        flag = flag || firstName.isEmpty() || firstName.equals(null);
+        //copy and  paste for all the other fields
+        return flag;
+    }
+
+    public void setDocId(Integer docId) {
         this.docId = docId;
-        this.firstName = fisrtName;
-        this.lastName = lastName;
-        this.phoneNum = phoneNum;
-        this.email = email;
-        this.address = address;
-        this.profession = profession;
-        this.amka = amka;
-        this.password = password;
     }
 
-    public Doctor(String fisrtName, String lastName, String phoneNum, String email, String address, String profession, String amka, String password) {
-        this.firstName = fisrtName;
-        this.lastName = lastName;
-        this.phoneNum = phoneNum;
-        this.email = email;
-        this.address = address;
-        this.profession = profession;
-        this.amka = amka;
-        this.password = password;
-    }
-
-    public int getDocId() {
+    public Integer getDocId() {
         return docId;
-    }
-
-    public void setDocId(int docId) {
-        this.docId = docId;
     }
 
     public String getFirstName() {
@@ -127,21 +148,12 @@ public class Doctor {
         this.docUsername = docUsername;
     }
 
-
-    public int getDiagnId() {
-        return diagnId;
+    public int getUserType() {
+        return userType;
     }
 
-    public void setDiagnId(int diagnId) {
-        this.diagnId = diagnId;
-    }
-
-    public int getAppointmentId() {
-        return appointmentId;
-    }
-
-    public void setAppointmentId(int appointmentId) {
-        this.appointmentId = appointmentId;
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 
     @Override
