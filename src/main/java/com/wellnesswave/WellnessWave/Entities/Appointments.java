@@ -12,15 +12,15 @@ public class Appointments {
     private int appointmentId;
     //Foreign key
 //    @OneToOne
-    private Doctor docId;
+    private Integer docId;
     //Foreign key
 //    @OneToOne
-    private Patient patientId;
+    private Integer patientId;
     private Date date;
     private Date time;
     private String appointInfo;
 
-    public Appointments(int appointmentId, Doctor docId, Patient patId, Date date, Date time, String appointInfo) {
+    public Appointments(int appointmentId, Integer docId, Integer patId, Date date, Date time, String appointInfo) {
         this.appointmentId = appointmentId;
         this.docId = docId;
         this.patientId = patId;
@@ -29,7 +29,7 @@ public class Appointments {
         this.appointInfo = appointInfo;
     }
 
-    public Appointments(Doctor docId, Patient patId, Date date, Date time, String appointInfo) {
+    public Appointments(Integer docId, Integer patId, Date date, Date time, String appointInfo) {
         this.docId = docId;
         this.patientId = patId;
         this.date = date;
@@ -45,19 +45,19 @@ public class Appointments {
         this.appointmentId = appointmentId;
     }
 
-    public Doctor getDocId() {
+    public Integer getDocId() {
         return docId;
     }
 
-    public void setDocId(Doctor docId) {
+    public void setDocId(Integer docId) {
         this.docId = docId;
     }
 
-    public Patient getPatientId() {
+    public Integer getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Patient patientId) {
+    public void setPatientId(Integer patientId) {
         this.patientId = patientId;
     }
 

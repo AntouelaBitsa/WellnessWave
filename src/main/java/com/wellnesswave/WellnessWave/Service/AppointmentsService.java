@@ -17,7 +17,7 @@ public class AppointmentsService {
         return appointmentRep.findAll();
     }
 
-    public Appointments getAppointById(Long id){
+    public Appointments getAppointById(Integer id){
         return appointmentRep.findById(id).orElse(null);
     }
 
@@ -25,7 +25,7 @@ public class AppointmentsService {
         return appointmentRep.save(appoint);
     }
 
-    public void deleteAppointment(Long id){
+    public void deleteAppointment(Integer id){
         appointmentRep.deleteById(id);
     }
 }

@@ -22,7 +22,7 @@ public class AppointmentsController {
     }
 
     @GetMapping("/getAppointById")
-    public Appointments getAppointById(@PathVariable Long id){
+    public Appointments getAppointById(@PathVariable Integer id){
         return appointService.getAppointById(id);
     }
 
@@ -32,7 +32,7 @@ public class AppointmentsController {
     }
 
     @PostMapping("/deleteAppointment")
-    public void deleteAppointment(@PathVariable Long id){
+    public void deleteAppointment(@PathVariable Integer id){
         appointService.deleteAppointment(id);
     }
 
