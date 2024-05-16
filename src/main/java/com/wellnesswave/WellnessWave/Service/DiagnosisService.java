@@ -17,7 +17,7 @@ public class DiagnosisService {
         return diagnosisRep.findAll();
     }
 
-    public Diagnosis getDiagnById(Long id){
+    public Diagnosis getDiagnById(Integer id){
         return diagnosisRep.findById(id).orElse(null);
     }
 
@@ -25,7 +25,7 @@ public class DiagnosisService {
         return diagnosisRep.save(diagn);
     }
 
-    public void deleteDiagn(Long id){
+    public void deleteDiagn(Integer id){
         diagnosisRep.deleteById(id);
     }
 }

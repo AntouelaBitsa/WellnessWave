@@ -18,7 +18,7 @@ public class DiagnosisController {
     }
 
     @GetMapping("/getDiagnById")
-    public Diagnosis getDiagnById(@PathVariable Long id){
+    public Diagnosis getDiagnById(@PathVariable Integer id){
         return diagnService.getDiagnById(id);
     }
 
@@ -28,7 +28,7 @@ public class DiagnosisController {
     }
 
     @DeleteMapping("/deleteDiagn")
-    public void deleteDiagn(@PathVariable Long id){
+    public void deleteDiagn(@PathVariable Integer id){
         diagnService.deleteDiagn(id);
     }
 

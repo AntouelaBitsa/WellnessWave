@@ -13,11 +13,11 @@ public class Diagnosis {
     //Foreign key
 //    @OneToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
-    private int docId;
+    private Integer docId;
     //Foreign key
 //    @OneToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
-    private Patient patientId;
+    private Integer patientId;
     private String diagnInfo;
     private String diagnType;
     private String treatment;
@@ -26,7 +26,7 @@ public class Diagnosis {
     private Date startDate;
     private Date endDate;
 
-    public Diagnosis(int diagnosisId, int docId, Patient patId, String diagnInfo, String diagnType, String treatment, String treatmName,
+    public Diagnosis(int diagnosisId, int docId, Integer patId, String diagnInfo, String diagnType, String treatment, String treatmName,
                      String treatmDose, Date startDate, Date endDate) {
         this.diagnosisId = diagnosisId;
         this.docId = docId;
@@ -40,7 +40,7 @@ public class Diagnosis {
         this.endDate = endDate;
     }
 
-    public Diagnosis(int docId, Patient patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
+    public Diagnosis(int docId, Integer patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
         this.docId = docId;
         this.patientId = patId;
         this.diagnInfo = diagnInfo;
@@ -68,11 +68,11 @@ public class Diagnosis {
         this.docId = docId;
     }
 
-    public Patient getPatientId() {
+    public Integer getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Patient patientId) {
+    public void setPatientId(Integer patientId) {
         this.patientId = patientId;
     }
 
