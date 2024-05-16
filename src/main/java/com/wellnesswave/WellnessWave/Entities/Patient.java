@@ -7,23 +7,31 @@ import jakarta.persistence.*;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int patientId;
+    private Integer patientId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String phoneNum;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String dob; //date of birth
+    @Column(nullable = false)
     private String patAmka;
+    @Column(nullable = false)
     private String patPassword;
     //Foreign key
 //    @OneToOne
-    private int appId;
+//    private int appId;
     //Foreign key
 //    @OneToOne
-    private int diagnId;
+//    private int diagnId;
+    @Column(nullable = false)
     private String patUsername;
 
-    public Patient(int patientId, String fisrtName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword) {
+    public Patient(Integer patientId, String fisrtName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword) {
         this.patientId = patientId;
         this.firstName = fisrtName;
         this.lastName = lastName;
@@ -44,7 +52,7 @@ public class Patient {
         this.patPassword = patPassword;
     }
 
-    public int getPatientId() {
+    public Integer getPatientId() {
         return patientId;
     }
 
@@ -108,7 +116,7 @@ public class Patient {
         this.patPassword = patPassword;
     }
 
-    public int getAppId() {
+    /*public int getAppId() {
         return appId;
     }
 
@@ -122,7 +130,7 @@ public class Patient {
 
     public void setDiagnId(int diagnId) {
         this.diagnId = diagnId;
-    }
+    }*/
 
     public String getPatUsername() {
         return patUsername;
@@ -143,8 +151,6 @@ public class Patient {
                 ", dob='" + dob + '\'' +
                 ", patAmka='" + patAmka + '\'' +
                 ", patPassword='" + patPassword + '\'' +
-                ", appId=" + appId +
-                ", diagnId=" + diagnId +
                 ", patUsername='" + patUsername + '\'' +
                 '}';
     }
