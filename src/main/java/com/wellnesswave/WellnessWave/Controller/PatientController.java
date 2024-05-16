@@ -19,7 +19,7 @@ public class PatientController {
     }
 
     @GetMapping("/getPatientById")
-    public Patient getPatientById(@PathVariable Long id){
+    public Patient getPatientById(@PathVariable Integer id){
         return patientService.getPatientById(id);
     }
 
@@ -29,7 +29,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/deletePatient")
-    public void deletePatient(@PathVariable Long id){
+    public void deletePatient(@PathVariable Integer id){
         patientService.deletePatient(id);
     }
 }
