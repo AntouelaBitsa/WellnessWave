@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import java.util.List;
 
 @RestController
@@ -16,18 +15,6 @@ public class DoctorController {
     //CRUD Operations Implemenation
     @Autowired
     private DoctorService doctorService;
-
-    //TEST METHOD - ERROR STATUS 500
-//    @GetMapping("/showDoc")
-//    public String showDoc(){
-////        return doctorService.getDoctor(); -> error 500
-//
-//        //thses 2 lines works perfectly
-//        Doctor doc = new Doctor("Antouela", "Bitsa", "kadakjdl", "6983805369",
-//                "antou@gmail.com", "5684623", "adanon", "programmer","lknkljiijk");
-//        return doc.toString();
-////        return doc; -> error 500
-//    }
 
     @GetMapping("/getAllDoctors")
     public List<Doctor> getAllDoctors(){
@@ -45,7 +32,7 @@ public class DoctorController {
         return doctorService.getDoctorById(id);
     }
 
-    //corrected with result class -> returns 0/1 for successful/failure
+    //CORRECT: with result class -> returns 0/1 for successful/failure
     @PostMapping("/createDoctor")
     public ResponseEntity<Result> createDoctor(@RequestBody Doctor doctor) {
         //Start : Testing Purpose
@@ -55,40 +42,25 @@ public class DoctorController {
         return new ResponseEntity<Result>(doctorService.createDoctor(doctor), HttpStatus.CREATED);
     }
 
-    //TODO : log in endpoint and add annotation
-    @PostMapping("/logInSession")
-    public Result logIn(@RequestParam("username") String username, @RequestParam("password") String password){
-        doctorService.logIN(username, password);
-        if(username.equals(null) && password.equals(null)){
-            System.out.println("Failed to find doctor");
-            return new Result(1, "Failed to find doctor");
+    //DONE : log in endpoint and add annotation + CORRECT
+        @PostMapping("/doctorLogInSession")
+        public ResponseEntity<Result> logIN(@RequestParam("username") String username, @RequestParam("password") String password){
+            System.out.println("Before doctor service log in ");
+            Result result = doctorService.logIN(username, password);
+            System.out.println(">> Print of result in controller -> " + result.toString()); //TEST
+//            return doctorService.logIN(username, password);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+
+            //        if(username.equals(null) && password.equals(null)){
+            //            System.out.println("Failed to find doctor");
+            //            return new Result(1, "Failed to find doctor");
+            //        }
+            //        System.out.println("User Session Info In JSON Format");
+            //        return new Result(0, new UserSession().getSessionJSON());
+
         }
-        System.out.println("User Session Info In JSON Format");
-        return new Result(0, "User Session Info In JSON Format");
-    }
 
-    // TEST METHOD To see the data that are sending wright
-//    @PostMapping("/newUser")
-//    public void newUser(@RequestParam String fName,
-//                        @RequestParam String lName,
-//                        @RequestParam String username,
-//                        @RequestParam String password,
-//                        @RequestParam String email,
-//                        @RequestParam String amka,
-//                        @RequestParam String phoneNumber,
-//                        @RequestParam String profession,
-//                        @RequestParam String address){
-//        Doctor d = new Doctor(fName,lName,username, password, email, amka, phoneNumber, profession, address);
-//        System.out.println("------- TEST PRINt ON Controller CLASS -------");
-//        System.out.println(d.toString());
-//    }
-
-
-    //TEST METHOD - ERROR STATUS 500
-//    @PostMapping("/addDoctor")
-//    public Doctor addDoctor(@RequestBody Doctor doc){
-//        return doctorService.createDoctor(doc);
-//    }
 //
 //    @PostMapping("/updateDoctor")
 //    public Doctor updateDoctor(@PathVariable Doctor doctor){
