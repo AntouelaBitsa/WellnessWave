@@ -1,64 +1,99 @@
 package com.wellnesswave.WellnessWave.Utils;
 
 import com.wellnesswave.WellnessWave.Entities.Doctor;
-import com.wellnesswave.WellnessWave.Repository.DoctorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.wellnesswave.WellnessWave.Entities.Patient;
 
 public class UserSession {
     //AUTHENTICATION contains basic and most importatnt info of an entity
+    private Integer patientId;
+    private Integer doctorId;
     private String firstName;
     private String lastName;
-    private String docUsername;
-    private String password;
+    private String username;
+//    private String password;
     private String email;
     private String phoneNum;
     private String address;
     private String profession;
-
-    @Autowired
-    private DoctorRepository doctorRepository;
-
-    public UserSession(String firstName, String lastName, String username, String password, String email, String phoneNum, String address, String profession) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.docUsername = username;
-        this.password = password;
-        this.email = email;
-        this.phoneNum = phoneNum;
-        this.address = address;
-        this.profession = profession;
-    }
+    private String patDob;
+//    private String dob;
+    private int userType;
 
     public UserSession() {
 
     }
 
-    public UserSession(String username, String password) {
-        this.docUsername = username;
-        this.password = password;
+    public UserSession(Doctor d) {
+        try {
+            this.doctorId = d.getDocId();
+            this.firstName = d.getFirstName();
+            this.lastName = d.getLastName();
+            this.username = d.getDocUsername();
+            this.email = d.getEmail();
+            this.phoneNum = d.getPhoneNum();
+            this.address = d.getAddress();
+            this.profession = d.getProfession();
+            this.userType = d.getUserType(); //code for doctor = 1
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+
+    }
+
+    //DONE: CONSTRUCTOR FOR PATIENT
+    public UserSession(Patient p) {
+        try {
+            this.patientId = p.getPatientId();
+            this.firstName = p.getFirstName();
+            this.lastName = p.getLastName();
+            this.username = p.getPatUsername();
+            this.email = p.getEmail();
+            this.phoneNum = p.getPhoneNum();
+            this.patDob = p.getDob();
+            this.userType = p.getUserType(); //code for doctor = 2
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+
     }
 
     public boolean tryLogIn() {
-//        It works also like this but only if we can add parameters to the method
-//        if(!(userName.equals(docUsername) && pass.equals(password))){
+        System.out.println("fName: " + firstName + "lName: " + lastName );
+        if(firstName.equals(null)){
+            return  false;
+        }
+        return true;
+//        if(!(username.equals(this.username) && password.equals(this.password))){
 //            return false;
 //        }
 //        return true;
-
-        if(!(docUsername.equals(this.docUsername) && password.equals(this.password))){
-            return false;
-        }
-        return true;
     }
 
-    public String getSessionJSON() {
-        String jsonSession = "first_name: "+ firstName + " ";
-        jsonSession += "last_name: "+ lastName + " ";
-        jsonSession += "username: "+ docUsername + " ";
-        jsonSession += "password: "+ password + " ";
-        jsonSession += "phoneNum: "+ phoneNum + " ";
-        jsonSession += "address: "+ address + " ";
-        jsonSession += "profession: "+ profession + " ";
+    public String getDocSessionJSON() {
+        String jsonSession = "{" +
+                "\"docId\": \"" + doctorId + "\"," +
+                "\"docFirstName\": \"" + firstName + "\"," +
+                "\"docLastName\": \"" + lastName + "\"," +
+                "\"docUsername\": \"" + username + "\"," +
+                "\"docEmail\": \"" + email + "\"," +
+                "\"docPhoneNum\": \"" + phoneNum + "\"," +
+                "\"docProfession\": \"" + profession + "\"," +
+                "\"docAddress\": \"" + address + "\"," +
+                "\"userType\": \"" + userType + "\"" +
+                "}";
+        return jsonSession;
+    }
+
+    public String getPatSessionJSON() {
+        String jsonSession = "{" +
+                "\"patientId\": \"" + patientId + "\"," +
+                "\"firstName\": \"" + firstName + "\"," +
+                "\"lastName\": \"" + lastName + "\"," +
+                "\"patUsername\": \"" + username + "\"," +
+                "\"phoneNum\": \"" + phoneNum + "\"," +
+                "\"dob\": \"" + patDob + "\"," +
+                "\"userType\": \"" + userType + "\"" +
+                "}";
         return jsonSession;
     }
 
@@ -74,13 +109,13 @@ public class UserSession {
         return lastName;
     }
 
-    public String getDocUsername() {
-        return docUsername;
+    public String getUsername() {
+        return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
 
     public String getEmail() {
         return email;
@@ -96,5 +131,17 @@ public class UserSession {
 
     public String getProfession() {
         return profession;
+    }
+
+    public Integer getPatientId() {
+        return patientId;
+    }
+
+    public Integer getDoctorId() {
+        return doctorId;
+    }
+
+    public String getPatDob() {
+        return patDob;
     }
 }
