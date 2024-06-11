@@ -22,34 +22,29 @@ public class Patient {
     private String patAmka;
     @Column(nullable = false)
     private String patPassword;
-    //Foreign key
-//    @OneToOne
-//    private int appId;
-    //Foreign key
-//    @OneToOne
-//    private int diagnId;
     @Column(nullable = false)
     private String patUsername;
+    private int userType;
 
-    public Patient(Integer patientId, String fisrtName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword) {
-        this.patientId = patientId;
-        this.firstName = fisrtName;
-        this.lastName = lastName;
-        this.phoneNum = phoneNum;
-        this.email = email;
-        this.dob = dob;
-        this.patAmka = patAmka;
-        this.patPassword = patPassword;
+    public Patient() {
     }
 
-    public Patient(String fisrtName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword) {
-        this.firstName = fisrtName;
+    public Patient(String firstName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword, String patUsername, int userType) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.email = email;
         this.dob = dob;
         this.patAmka = patAmka;
         this.patPassword = patPassword;
+        this.patUsername = patUsername;
+        this.userType = userType;
+    }
+
+    public boolean hasEmptyOrNull(){
+        return firstName.isEmpty() || firstName.equals(null) || lastName.isEmpty() || lastName.equals(null) || phoneNum.isEmpty() || phoneNum.equals(null) ||
+                email.isEmpty() || email.equals(null) || dob.isEmpty() || dob.equals(null) || patAmka.isEmpty() || patAmka.equals(null) ||
+                patPassword.isEmpty() || patPassword.equals(null) || patUsername.isEmpty() || patUsername.equals(null);
     }
 
     public Integer getPatientId() {
@@ -115,29 +110,20 @@ public class Patient {
     public void setPatPassword(String patPassword) {
         this.patPassword = patPassword;
     }
-
-    /*public int getAppId() {
-        return appId;
-    }
-
-    public void setAppId(int appId) {
-        this.appId = appId;
-    }
-
-    public int getDiagnId() {
-        return diagnId;
-    }
-
-    public void setDiagnId(int diagnId) {
-        this.diagnId = diagnId;
-    }*/
-
     public String getPatUsername() {
         return patUsername;
     }
 
     public void setPatUsername(String patUsername) {
         this.patUsername = patUsername;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 
     @Override
