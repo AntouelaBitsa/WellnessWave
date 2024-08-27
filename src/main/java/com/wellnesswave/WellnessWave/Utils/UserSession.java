@@ -50,7 +50,7 @@ public class UserSession {
             this.email = p.getEmail();
             this.phoneNum = p.getPhoneNum();
             this.patDob = p.getDob();
-            this.userType = p.getUserType(); //code for doctor = 2
+            this.userType = p.getUserType(); //code for patient = 2
         }catch (Exception e){
             System.out.println(e.toString());
         }
@@ -58,7 +58,7 @@ public class UserSession {
     }
 
     public boolean tryLogIn() {
-        System.out.println("fName: " + firstName + "lName: " + lastName );
+        System.out.println("fName: " + firstName + " lName: " + lastName );
         if(firstName.equals(null)){
             return  false;
         }
@@ -90,6 +90,7 @@ public class UserSession {
                 "\"firstName\": \"" + firstName + "\"," +
                 "\"lastName\": \"" + lastName + "\"," +
                 "\"patUsername\": \"" + username + "\"," +
+                "\"email\": \"" + email + "\"," +
                 "\"phoneNum\": \"" + phoneNum + "\"," +
                 "\"dob\": \"" + patDob + "\"," +
                 "\"userType\": \"" + userType + "\"" +
