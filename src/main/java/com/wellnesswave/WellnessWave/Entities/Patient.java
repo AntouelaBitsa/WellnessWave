@@ -2,6 +2,9 @@ package com.wellnesswave.WellnessWave.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "patient")
 public class Patient {
@@ -25,6 +28,13 @@ public class Patient {
     @Column(nullable = false)
     private String patUsername;
     private int userType;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
+    private List<Appointments> patAppointments = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
+    private List<Diagnosis> patDiagnosis = new ArrayList<>();
 
     public Patient() {
     }
