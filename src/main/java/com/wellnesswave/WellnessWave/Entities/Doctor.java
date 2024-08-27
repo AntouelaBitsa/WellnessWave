@@ -1,6 +1,10 @@
 package com.wellnesswave.WellnessWave.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "doctor")
@@ -27,6 +31,13 @@ public class Doctor {
     @Column(nullable = false)
     private String docUsername;
     private int userType;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
+    private List<Appointments> docAppointments = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
+    private List<Diagnosis> docDiagnosis = new ArrayList<>();
 
     public Doctor() {
     }
@@ -43,6 +54,14 @@ public class Doctor {
         this.docUsername = docUsername;
         this.userType = userType;
     }
+
+    //Constructor for a list of specific doctors
+//    public Doctor(Integer docId, String firstName, String lastName /*, String email*/) {
+//        this.docId = docId;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+////        this.email = email;
+//    }
 
     public boolean hasEmptyOrNull(){
         //returns true if one or more fields are empty or null
@@ -67,6 +86,8 @@ public class Doctor {
         //copy and  paste for all the other fields
         return flag;
     }
+
+
 
     public void setDocId(Integer docId) {
         this.docId = docId;
@@ -156,18 +177,37 @@ public class Doctor {
         this.userType = userType;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Doctor{" +
+//                "docId=" + docId +
+//                ", fisrtName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", phoneNum='" + phoneNum + '\'' +
+//                ", email='" + email + '\'' +
+//                ", address='" + address + '\'' +
+//                ", profession='" + profession + '\'' +
+//                ", amka='" + amka + '\'' +
+//                ", password='" + password + '\'' +
+//                '}';
+//    }
+
     @Override
     public String toString() {
-        return "Doctor{" +
-                "docId=" + docId +
-                ", fisrtName='" + firstName + '\'' +
+        return "DoctorDTO{" +
+                "id=" + docId +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", phoneNum='" + phoneNum + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", profession='" + profession + '\'' +
-                ", amka='" + amka + '\'' +
-                ", password='" + password + '\'' +
                 '}';
+    }
+
+    public String createJSONList() {
+        String jsonSession = "[\" {\" " +
+                "\"docId\": \"" + docId + "\"," +
+                "\"docFirstName\": \"" + firstName + "\"," +
+                "\"docLastName\": \"" + lastName + "\"," +
+                "}\" ]\"";
+//        "[\n  {\n    \"docId\": 1,\n    \"firstName\": \"Antouela\",\n    \"lastName\": \"Bitsa\"\n  },\n  {\n    \"docId\": 6,\n    \"firstName\": \"Matheos\",\n    \"lastName\": \"Vasiliadis\"\n  }\n]"
+        return jsonSession;
     }
 }
