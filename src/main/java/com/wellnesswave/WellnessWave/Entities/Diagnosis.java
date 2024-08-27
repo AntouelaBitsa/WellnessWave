@@ -1,79 +1,70 @@
 package com.wellnesswave.WellnessWave.Entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.concurrent.atomic.LongAccumulator;
 
 @Entity
 @Table(name="diagnosis")
 public class Diagnosis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int diagnosisId;
-    //Foreign key
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
-    private Integer docId;
-    //Foreign key
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
-    private Integer patientId;
-    private String diagnInfo;
+    private Integer diagnosisId;
     private String diagnType;
     private String treatment;
-    private String treatmName;
     private String treatmDose;
-    private Date startDate;
-    private Date endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
+    private String diagnInfo;
+    //Foreign key
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doc_id")
+    private Doctor doctor;
 
-    public Diagnosis(int diagnosisId, int docId, Integer patId, String diagnInfo, String diagnType, String treatment, String treatmName,
-                     String treatmDose, Date startDate, Date endDate) {
-        this.diagnosisId = diagnosisId;
-        this.docId = docId;
-        this.patientId = patId;
-        this.diagnInfo = diagnInfo;
+    //Foreign Key
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    public Diagnosis() {
+    }
+
+    //POSTMAN endpoint test
+//    public Diagnosis(Integer diagnosisId, String diagnInfo, String diagnType, String treatment, String treatmDose, LocalDate startDate, LocalDate endDate, Doctor doctor, Patient patient) {
+//        this.diagnosisId = diagnosisId;
+//        this.diagnInfo = diagnInfo;
+//        this.diagnType = diagnType;
+//        this.treatment = treatment;
+//        this.treatmDose = treatmDose;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//        this.doctor = doctor;
+//        this.patient = patient;
+//    }
+//
+
+    public Diagnosis(String diagnType, String treatment, String treatmDose, LocalDate startDate, LocalDate endDate, String diagnInfo, Doctor doctor, Patient patient) {
         this.diagnType = diagnType;
         this.treatment = treatment;
-        this.treatmName = treatmName;
         this.treatmDose = treatmDose;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public Diagnosis(int docId, Integer patId, String diagnInfo, String diagnType, String treatment, String treatmName, String treatmDose, Date startDate, Date endDate) {
-        this.docId = docId;
-        this.patientId = patId;
         this.diagnInfo = diagnInfo;
-        this.diagnType = diagnType;
-        this.treatment = treatment;
-        this.treatmName = treatmName;
-        this.treatmDose = treatmDose;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.doctor = doctor;
+        this.patient = patient;
     }
 
-    public int getDiagnosisId() {
+    public Integer getDiagnosisId() {
         return diagnosisId;
     }
 
-    public void setDiagnosisId(int diagnosisId) {
+    public void setDiagnosisId(Integer diagnosisId) {
         this.diagnosisId = diagnosisId;
-    }
-
-    public int getDocId() {
-        return docId;
-    }
-
-    public void setDocId(int docId) {
-        this.docId = docId;
-    }
-
-    public Integer getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
     }
 
     public String getDiagnInfo() {
@@ -100,14 +91,6 @@ public class Diagnosis {
         this.treatment = treatment;
     }
 
-    public String getTreatmName() {
-        return treatmName;
-    }
-
-    public void setTreatmName(String treatmName) {
-        this.treatmName = treatmName;
-    }
-
     public String getTreatmDose() {
         return treatmDose;
     }
@@ -116,35 +99,50 @@ public class Diagnosis {
         this.treatmDose = treatmDose;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     @Override
     public String toString() {
         return "Diagnosis{" +
                 "diagnosisId=" + diagnosisId +
-                ", docId=" + docId +
-                ", patId=" + patientId +
                 ", diagnInfo='" + diagnInfo + '\'' +
                 ", diagnType='" + diagnType + '\'' +
                 ", treatment='" + treatment + '\'' +
-                ", treatmName='" + treatmName + '\'' +
                 ", treatmDose='" + treatmDose + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", doctor=" + doctor +
+                ", patient=" + patient +
                 '}';
     }
 }
