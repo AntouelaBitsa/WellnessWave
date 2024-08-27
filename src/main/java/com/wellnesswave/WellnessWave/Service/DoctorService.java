@@ -27,19 +27,14 @@ public class DoctorService {
         System.out.println("Doctor : " + doctor.toString());
         if (doctor.hasEmptyOrNull()){
             return new Result(1, "One or more fields empty/null");
-//            return new Result("One or more fields empty/null", 1);
         }
-
         //handling exception
         try{
             doctorRep.save(doctor);
         }catch (Exception e){
             return new Result(1, "Exception during doctor save");
-//            return new Result("Exception during doctor save",1);
         }
-
         return new Result(0, "Doctor created successfully");
-//        return new Result("Doctor created successfully", 0);
     }
 
     //Thodoris edit
@@ -50,9 +45,7 @@ public class DoctorService {
 //        Result res = new Result();  //TEST
         if(doc == null){
             System.out.println("userExists == FALSE");
-//            res = new Result(1, "User doesn't exist. Check your username and password");
             return new Result(1, "User doesn't exist. Check your username and password");
-//            return new Result("User doesn't exist. Check your username and password", 1);
         }
 
         UserSession userSession = new UserSession(doc);
@@ -62,7 +55,6 @@ public class DoctorService {
 //        res.resultJSON(0, userSession);  //TEST
 //        return res; //TEST
         return new Result(0, userSession.getDocSessionJSON());  //initial way
-//        return new Result(userSession.getDocSessionJSON(), 0);
     }
 
 //    public Doctor updateDoctor(Doctor doctor){

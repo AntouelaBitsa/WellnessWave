@@ -43,13 +43,13 @@ public class DoctorController {
     }
 
     //DONE : log in endpoint and add annotation + CORRECT
-        @PostMapping("/doctorLogInSession")
-        public ResponseEntity<Result> logIN(@RequestParam("username") String username, @RequestParam("password") String password){
-            System.out.println("Before doctor service log in ");
-            Result result = doctorService.logIN(username, password);
-            System.out.println(">> Print of result in controller -> " + result.toString()); //TEST
-//            return doctorService.logIN(username, password);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+    @PostMapping("/doctorLogInSession")
+    public ResponseEntity<Result> logIN(@RequestParam("username") String username, @RequestParam("password") String password){
+        System.out.println("Before doctor service log in ");
+        Result result = doctorService.logIN(username, password);
+        System.out.println(">> Print of result in controller -> " + result.toString()); //TEST
+//        return doctorService.logIN(username, password);
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
 
             //        if(username.equals(null) && password.equals(null)){
