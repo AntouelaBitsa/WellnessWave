@@ -1,40 +1,57 @@
 package com.wellnesswave.WellnessWave.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
+
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
 
 @Entity
 @Table(name="appointments")
 public class Appointments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int appointmentId;
-    //Foreign key
-//    @OneToOne
-    private Integer docId;
-    //Foreign key
-//    @OneToOne
-    private Integer patientId;
-    private Date date;
-    private Date time;
+    private Integer appointmentId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate date;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+    private LocalTime time;
     private String appointInfo;
 
-    public Appointments(int appointmentId, Integer docId, Integer patId, Date date, Date time, String appointInfo) {
-        this.appointmentId = appointmentId;
-        this.docId = docId;
-        this.patientId = patId;
-        this.date = date;
-        this.time = time;
-        this.appointInfo = appointInfo;
+    //Foreign key
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doc_id")
+    private Doctor doctor;
+
+    //Foreign Key
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    public Appointments() {
     }
 
-    public Appointments(Integer docId, Integer patId, Date date, Date time, String appointInfo) {
-        this.docId = docId;
-        this.patientId = patId;
+    public Appointments(LocalDate date, LocalTime time, String appointInfo, Doctor doctor, Patient patient) {
         this.date = date;
         this.time = time;
         this.appointInfo = appointInfo;
+        this.doctor = doctor;
+        this.patient = patient;
+        System.out.println(">>> Appointment Controller doc address : " + doctor.getAddress());
     }
 
     public int getAppointmentId() {
@@ -45,35 +62,19 @@ public class Appointments {
         this.appointmentId = appointmentId;
     }
 
-    public Integer getDocId() {
-        return docId;
-    }
-
-    public void setDocId(Integer docId) {
-        this.docId = docId;
-    }
-
-    public Integer getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
-    }
-
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Date getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
@@ -85,15 +86,35 @@ public class Appointments {
         this.appointInfo = appointInfo;
     }
 
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
     @Override
     public String toString() {
         return "Appointments{" +
                 "appointmentId=" + appointmentId +
-                ", docId=" + docId +
-                ", patId=" + patientId +
                 ", date=" + date +
                 ", time=" + time +
                 ", appointInfo='" + appointInfo + '\'' +
+                ", doctor=" + doctor +
+                ", patient=" + patient +
                 '}';
+    }
+
+    public boolean hasEmptyOrNull() {
+        return date.equals(null) || time.equals(null) || appointInfo.isEmpty() ||appointInfo.equals(null);
     }
 }
