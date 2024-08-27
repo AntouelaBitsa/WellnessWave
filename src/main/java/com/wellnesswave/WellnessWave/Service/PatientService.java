@@ -38,16 +38,33 @@ public class PatientService {
     }
 
     //TODO: logIN Patient
-//    public Result logIN(String patUsername, String patPassword){
-//        //TODO : check if the specific patient has an entry in the db
-//        //TODO : MODIFICATIONS IN USERSESSION CLASS
-//        UserSession userSession = new UserSession(patUsername, patPassword);
-//        boolean userExists = userSession.tryLogIn();
-//        if(!userExists){
-//            return new Result(1, "Patient doesn't exist! Please insert valid Username and Password");
+    public Result logIN(String patUsername, String patPassword){
+        Patient pat = patientRep.findByPatUsernameAndPatPassword(patUsername, patPassword);
+        if (pat == null){
+            System.out.println("userExists == FALSE");
+            return new Result(1, "User doesn't exist. Check your username and password");
+        }
+        //TODO : check if the specific patient has an entry in the db
+        //TODO : MODIFICATIONS IN USER SESSION CLASS
+        UserSession userSession = new UserSession(pat);
+        boolean userExists = userSession.tryLogIn();
+        System.out.println("The User Is : " + userExists + " " + userSession.getDocSessionJSON());
+        System.out.println("Resutl User session print : ");
+        return new Result(0, userSession.getPatSessionJSON());
+    }
+
+//    public Patient getPatByAmka(String amka){
+//        Patient p;
+//
+//        try{
+//            p = patientRep.findByPatAmka(amka);
+//        }catch (Exception e){
+//            System.out.println(">PatientService: getPatByAmka<" +
+//                    "An exception occurred: " + e + "Patient setted to null");
+//            p = new Patient();
 //        }
-//        System.out.println("The User Is : " + userExists + " " + userSession.getPatSessionJSON());
-//        return new Result(0, userSession.getPatSessionJSON());
+//
+//        return p;
 //    }
 
 //    public Patient updatePatient(Patient patient){

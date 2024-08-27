@@ -37,16 +37,14 @@ public class PatientController {
     }
 
     //DONE: logIn endpoint
-//    @PostMapping("/patientLogInSession")
-//    public Result logIn(@RequestParam("username") String username, @RequestParam("password") String password){
-//        patientService.logIN(username, password);
-//        if(username.equals(null) && password.equals(null)){
-//            System.out.println("Failed to find patient");
-//            return new Result(1, " Failed to find patient");
-//        }
-//        System.out.println("User Session info in JSON Format");
-//        return new Result(0, "User Session info in JSON Format");
-//    }
+    @PostMapping("/patientLogInSession")
+    public ResponseEntity<Result> logIn(@RequestParam("username") String username, @RequestParam("password") String password){
+        System.out.println("Before doctor service log in ");
+        Result result = patientService.logIN(username, password);
+
+        System.out.println(">> Print of result in controller -> " + result.toString()); //TEST
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 //    @PostMapping("/updatePatient")
 //    public Patient updatePatient(@PathVariable Patient patient){
