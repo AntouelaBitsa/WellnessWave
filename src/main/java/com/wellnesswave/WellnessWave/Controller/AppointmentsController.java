@@ -44,9 +44,6 @@ public class AppointmentsController {
 
         Result docResult = appointService.getSpecialisedDoc(profession);
         System.out.println("Result print: " + docResult.toString());
-//        for (Doctor doc : docResult.getSpecialisedDoc()){
-//            System.out.println(">>> Result of Doctors Controller : " + doc);
-//        }
         return new ResponseEntity<>(docResult, HttpStatus.OK);
     }
 //    @PostMapping("/updateAppointment")
