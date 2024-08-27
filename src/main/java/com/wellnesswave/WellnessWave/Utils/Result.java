@@ -1,9 +1,13 @@
 package com.wellnesswave.WellnessWave.Utils;
 
+import com.wellnesswave.WellnessWave.Entities.Doctor;
+
+import java.util.List;
+
 public class Result {
     private int status;
     private String message;
-    private UserSession userSession;
+//    private List<Doctor> specialisedDoc;
 
     public Result() {
     }
@@ -12,20 +16,15 @@ public class Result {
         this.status = status;
         this.message = message;
         System.out.println("1st Constructor");
-        System.out.println("PRINT MESSAGE : " + message);
+//        System.out.println("PRINT MESSAGE : " + message);
     }
 
-    public Result(int status, UserSession userSession) {
-        //THIS WAS A SECOND CONSTRUCTOR
-//        Result r = new Result(); //TEST
-        this.status = status;
-        this.userSession = userSession;
-        System.out.println("2nd Constructor USER-SESSION");
-//        r.setStatus(this.status); //TEST
-//        r.setUserSession(this.userSession);  //TEST
-//        System.out.println("r object afte CHANGES" + r.toString());  //TEST
-//        return r;  //TEST
-    }
+//    public Result(int status, List<Doctor> docList) {
+//        //THIS WAS A SECOND CONSTRUCTOR
+//        this.status = status;
+//        this.specialisedDoc = docList;
+//        System.out.println("2nd Constructor For Specialised Doctor");
+//    }
 
     public int getStatus() {
         return status;
@@ -54,4 +53,17 @@ public class Result {
                 ", message='" + message + '\'' +
                 '}';
     }
+
+
+//    public List<Doctor> getSpecialisedDoc() {
+//        return specialisedDoc;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "Result{" +
+//                "status=" + status +
+//                ", specilisedDoc=" + specialisedDoc +
+//                '}';
+//    }
 }
