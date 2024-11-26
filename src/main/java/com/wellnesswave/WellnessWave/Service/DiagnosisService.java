@@ -57,7 +57,7 @@ public class DiagnosisService {
         return new Result(0, "Successful appointment booking");
     }
 
-    //TODO: implementation of getPatientByAmka -> returned Patient
+    //DONE: implementation of getPatientByAmka -> returned Patient
     public Patient getPatientByAmka(String patAmka){
         //Check if amka is passed as null
         if (patAmka == null){

@@ -13,6 +13,7 @@ public class Diagnosis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer diagnosisId;
+    @Column(nullable = false)
     private String diagnType;
     private String treatment;
     private String treatmDose;
@@ -20,6 +21,7 @@ public class Diagnosis {
     private LocalDate startDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    @Column(nullable = false)
     private String diagnInfo;
     //Foreign key
     @ManyToOne(cascade = CascadeType.ALL)
