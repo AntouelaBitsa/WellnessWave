@@ -2,16 +2,14 @@ package com.wellnesswave.WellnessWave.Controller;
 
 import com.wellnesswave.WellnessWave.Entities.Appointments;
 import com.wellnesswave.WellnessWave.Entities.Doctor;
+import com.wellnesswave.WellnessWave.Entities.Patient;
 import com.wellnesswave.WellnessWave.Service.AppointmentsService;
 import com.wellnesswave.WellnessWave.Utils.Result;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -46,15 +44,34 @@ public class AppointmentsController {
         System.out.println("Result print: " + docResult.toString());
         return new ResponseEntity<>(docResult, HttpStatus.OK);
     }
+
+    @GetMapping("/getAppointmentsByPatient/{patientID}")
+    public ResponseEntity<List<Appointments>> getAppointmentsByPatient(@PathVariable Patient patientID){
+        List<Appointments> appointList = appointService.patientAppointments(patientID);
+        System.out.println("[-1-AppointmentController] getAppointmentsByPatient: appointList= " + appointList);
+        System.out.println("[-2-AppointmentController] getAppointmentsByPatient: Call of service");
+        return new ResponseEntity<>(appointList, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAppointmentsByDoctor/{doctorID}")
+    public  ResponseEntity<List<Appointments>> getAppointmentsByDoctor(@PathVariable Doctor doctorID){
+        List<Appointments> docAppointList = appointService.doctorAppointments(doctorID);
+        System.out.println("[-1-AppointmentController] getAppointmentsByDoctor: appointList= " + docAppointList);
+        System.out.println("[-2-AppointmentController] getAppointmentsByDoctor: Call of service");
+        return new ResponseEntity<>(docAppointList, HttpStatus.OK);
+    }
+
 //    @PostMapping("/updateAppointment")
 //    public Appointments updateAppointment(@PathVariable Appointments appoint){
 //        return appointService.updateAppointment(appoint);
 //    }
 //
-//    @PostMapping("/deleteAppointment")
-//    public void deleteAppointment(@PathVariable Integer id){
-//        appointService.deleteAppointment(id);
-//    }
+    @PostMapping("/deleteAppointment")
+    public ResponseEntity<Result> deleteAppointment(@RequestParam("id") Integer id){
+        System.out.println("[-1-AppointmentController] deleteAppointment: appoint id= " + id);
+        System.out.println("[-2-AppointmentController] deleteAppointment: Call of service");
+        return new ResponseEntity<>(appointService.softDeleteAppointment(id), HttpStatus.OK);
+    }
 
-    //check for other endpoints that we want to implement
+    //TODO: check for other endpoints that we want to implement
 }
