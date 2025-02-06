@@ -3,12 +3,14 @@ package com.wellnesswave.WellnessWave.Controller;
 import com.wellnesswave.WellnessWave.Entities.Doctor;
 import com.wellnesswave.WellnessWave.Service.DoctorService;
 import com.wellnesswave.WellnessWave.Utils.Result;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class DoctorController {
@@ -48,29 +50,34 @@ public class DoctorController {
         System.out.println("Before doctor service log in ");
         Result result = doctorService.logIN(username, password);
         System.out.println(">> Print of result in controller -> " + result.toString()); //TEST
-//        return doctorService.logIN(username, password);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
+    @PatchMapping("/updateDoctor/{id}")
+    public ResponseEntity<Doctor> updateDoctor(@PathVariable Integer id, @RequestBody Map<String, Object> updatedDocMap){
+        System.out.println("[Controller: Update Patient] Id: " + id + " UpdatedPatient: " + updatedDocMap.toString());
+        Doctor updatedDoc = doctorService.updateDoctor(id, updatedDocMap);
+        return new ResponseEntity<>(updatedDoc, HttpStatus.OK);
+    }
 
-            //        if(username.equals(null) && password.equals(null)){
-            //            System.out.println("Failed to find doctor");
-            //            return new Result(1, "Failed to find doctor");
-            //        }
-            //        System.out.println("User Session Info In JSON Format");
-            //        return new Result(0, new UserSession().getSessionJSON());
+    @DeleteMapping("/deleteDoctor/{id}")
+    public ResponseEntity<Result> deleteDoctor(@PathVariable Integer id){
 
+        try{
+            doctorService.deleteDoctor(id);
+            System.out.println("[1 - Controller: On doc Deletion] " + "Doctor with ID: " + id + " deleted successfully.");
+            Result success = new Result(1, "Doctor with ID: " + id + " deleted successfully.");
+            return new ResponseEntity<>(success, HttpStatus.OK);
+        }catch(EntityNotFoundException entityNotFound){
+            System.out.println("[2 - Controller: On doc Deletion] " + "Doctor with ID: " + id + " not found.");
+            Result entityNFound = new Result(0, "Doctor with ID: " + id + " not found.");
+            return new ResponseEntity<>(entityNFound, HttpStatus.NOT_FOUND);
+        }catch(Exception e){
+            System.out.println("[3 - Controller: On doc Deletion] " + "An error occurred while deleting the doctor.");
+            Result exception = new Result(0, "An error occurred while deleting the doctor.");
+            return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-//
-//    @PostMapping("/updateDoctor")
-//    public Doctor updateDoctor(@PathVariable Doctor doctor){
-//        return doctorService.updateDoctor(doctor);
-//    }
-//
-//    @DeleteMapping("/deleteDoctor")
-//    public void deleteDoctor(@PathVariable Integer id){
-//        doctorService.deleteDoctor(id);
-//    }
-//
-//    //check for other endpoints that we want to implement
+
+    }
 }
