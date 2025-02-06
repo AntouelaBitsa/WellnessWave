@@ -24,13 +24,17 @@ public class Diagnosis {
     @Column(nullable = false)
     private String diagnInfo;
     //Foreign key
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doc_id")
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "doc_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "doc_id", nullable = false)
     private Doctor doctor;
 
     //Foreign Key
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id")
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "patient_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
     public Diagnosis() {
