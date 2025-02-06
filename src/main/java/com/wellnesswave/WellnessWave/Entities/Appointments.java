@@ -18,14 +18,18 @@ public class Appointments {
     private LocalTime time;
     private String appointInfo;
 
-    //Foreign key
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doc_id")
+    //Foreign key - Parent
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "doc_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "doc_id", nullable = false)
     private Doctor doctor;
 
-    //Foreign Key
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id")
+    //Foreign Key - Parent
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "patient_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
     private String status;
 
