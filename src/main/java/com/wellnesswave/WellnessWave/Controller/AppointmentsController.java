@@ -73,5 +73,11 @@ public class AppointmentsController {
         return new ResponseEntity<>(appointService.softDeleteAppointment(id), HttpStatus.OK);
     }
 
-    //TODO: check for other endpoints that we want to implement
+    @GetMapping("/getAppointmentsOnDateSelected/{date}/{userId}/{userType}")
+    public  ResponseEntity<List<Appointments>> getAppointmentsOnDateSelected(@PathVariable String date, @PathVariable Integer userId, @PathVariable Integer userType){
+        List<Appointments> appointListOnDate = appointService.getAppointOnDateSelect(date, userId, userType);
+        System.out.println("[-1-AppointmentController] getAppoinmnetsOnDateSelected: appointListOnDate= " + appointListOnDate);
+        System.out.println("[-2-AppointmentController] getAppoinmnetsOnDateSelected: Call of service");
+        return new ResponseEntity<>(appointListOnDate, HttpStatus.OK);
+    }
 }
