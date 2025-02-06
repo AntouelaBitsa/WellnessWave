@@ -1,13 +1,18 @@
 package com.wellnesswave.WellnessWave.Service;
 
 import com.wellnesswave.WellnessWave.Entities.Doctor;
+import com.wellnesswave.WellnessWave.Entities.Patient;
 import com.wellnesswave.WellnessWave.Repository.DoctorRepository;
 import com.wellnesswave.WellnessWave.Utils.Result;
 import com.wellnesswave.WellnessWave.Utils.UserSession;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DoctorService {
@@ -20,7 +25,7 @@ public class DoctorService {
     }
 
     public Doctor getDoctorById(Integer id){
-        return doctorRep.findById(id).orElse(null);
+        return doctorRep.findById(id).orElseThrow(()-> new RuntimeException("Doctor Not Found."));
     }
 
     public Result createDoctor(Doctor doctor){
@@ -57,11 +62,48 @@ public class DoctorService {
         return new Result(0, userSession.getDocSessionJSON());  //initial way
     }
 
-//    public Doctor updateDoctor(Doctor doctor){
-//        return doctorRep.save(doctor);
-//    }
-//
-//    public void deleteDoctor(Integer id){
-//        doctorRep.deleteById(id);
-//    }
+    public Doctor updateDoctor(Integer id, Map<String, Object> updatedDoc){
+        Doctor mappedDoctorById = this.getDoctorById(id);
+        System.out.println("[Debug Message: Update Info] Mapped Patient Id: " + mappedDoctorById);
+
+        if (mappedDoctorById.hasEmptyOrNull() || mappedDoctorById == null){
+            System.out.println("Something went wrong in patient retrieval, some field is null or the patient doesn't exists");
+        }
+        System.out.println("Keys in updatedDocMap: " + updatedDoc.keySet());
+        System.out.println("[Service before mapping] updatedDoc: " + updatedDoc.toString());
+
+        updatedDoc.forEach((key, value) -> {
+            Field fieldToUpdate = ReflectionUtils.findField(Doctor.class, key);
+//            System.out.println("[Service Mapping] fieldsToUpdate: " + fieldToUpdate.toString());
+            if (fieldToUpdate == null){
+                System.out.println("The Filed: " + key.toString() + " & in empty or null");
+                return;
+            }
+            fieldToUpdate.setAccessible(true);
+//            ReflectionUtils.setField(fieldToUpdate, mappedDoctorById, value);
+
+            // Check if the field type matches the value type
+            if (fieldToUpdate.getType().isAssignableFrom(value.getClass())) {
+                ReflectionUtils.setField(fieldToUpdate, mappedDoctorById, value);
+            } else {
+                System.out.println("Field to Update type" + fieldToUpdate.getType().isAssignableFrom(value.getClass()));
+                System.out.println("Type mismatch: " + key.toString() + " expects " + fieldToUpdate.getType() + " but got " + value.getClass());
+            }
+        });
+
+        return doctorRep.save(mappedDoctorById);
+    }
+
+    public void deleteDoctor(Integer id){
+        Doctor doctorToDelete = doctorRep.findById(id).orElseThrow(() -> new EntityNotFoundException("Doctor Not Found"));
+
+        try {
+            System.out.println("[1 - On Doc Delete] Inside try before Delete: " + doctorToDelete);
+            doctorRep.deleteById(id);
+//            System.out.println("[2 - On Doc Delete] Inside try before Delete: " + doctorRep.findById(id).orElseThrow(() -> new EntityNotFoundException("Doctor Not Found")));
+        }catch (Exception e){
+            System.out.println("[3 - On Doc Delete] Exception Occurred: " + e.getMessage());
+        }
+
+    }
 }
