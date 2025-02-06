@@ -1,5 +1,6 @@
 package com.wellnesswave.WellnessWave.Controller;
 
+import com.wellnesswave.WellnessWave.Entities.Appointments;
 import com.wellnesswave.WellnessWave.Entities.Diagnosis;
 import com.wellnesswave.WellnessWave.Entities.Patient;
 import com.wellnesswave.WellnessWave.Service.DiagnosisService;
@@ -41,15 +42,23 @@ public class DiagnosisController {
         return new ResponseEntity<>(diagnService.getPatientByAmka(patAmka), HttpStatus.CREATED);
     }
 
-    @PostMapping("/updateDiagn")
-    public Diagnosis updateDiagn(@PathVariable Diagnosis diagn){
-        return diagnService.updateDiagn(diagn);
+    @GetMapping("/getListOfDiagnosisByPatient/{patId}")
+    public  ResponseEntity<List<Diagnosis>> getListOfDiagnosisByPatient(@PathVariable Integer patId){
+        List<Diagnosis> diagnosisList = diagnService.diagnosisOfUser(patId);
+        System.out.println("[1 Diagnosis Controller] getListOfDiagnosisByPatient: diagnosisList = " + diagnosisList);
+        System.out.println("[2 Diagnosis Controller] getListOfDiagnosisByPatient: Call of service, before return statement");
+        return new ResponseEntity<>(diagnosisList, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteDiagn")
-    public void deleteDiagn(@PathVariable Integer id){
-        diagnService.deleteDiagn(id);
-    }
+//    @PostMapping("/updateDiagn")
+//    public Diagnosis updateDiagn(@PathVariable Diagnosis diagn){
+//        return diagnService.updateDiagn(diagn);
+//    }
+
+//    @DeleteMapping("/deleteDiagn")
+//    public void deleteDiagn(@PathVariable Integer id){
+//        diagnService.deleteDiagn(id);
+//    }
 
     //check for other endpoints that we want to implement
 
