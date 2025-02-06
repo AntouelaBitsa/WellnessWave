@@ -3,7 +3,7 @@ package com.wellnesswave.WellnessWave.Service;
 import com.google.gson.GsonBuilder;
 import com.wellnesswave.WellnessWave.Entities.Appointments;
 import com.wellnesswave.WellnessWave.Entities.Doctor;
-import com.wellnesswave.WellnessWave.Entities.DoctorDTO;
+import com.wellnesswave.WellnessWave.Utils.DoctorDTO;
 import com.wellnesswave.WellnessWave.Entities.Patient;
 import com.wellnesswave.WellnessWave.Repository.AppointmentsRepository;
 import com.wellnesswave.WellnessWave.Repository.DoctorRepository;
@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class AppointmentsService {
@@ -35,7 +37,7 @@ public class AppointmentsService {
 
     public Appointments getAppointById(Integer id){
         Appointments appoint = new Appointments();
-        appoint = appointmentRep.findById(id).orElse(null);
+        appoint = appointmentRep.findById(id).orElseThrow(()-> new RuntimeException("Appointment Not Found."));
         System.out.println(">>> appoint : " + appoint.toString());
 //        return appointmentRep.findById(id).orElse(null);
         return appoint;
@@ -64,7 +66,7 @@ public class AppointmentsService {
         return new Result(0, "Successful appointment booking");
     }
 
-    //DONE: get doctor by spacialisation
+    //DONE: get doctor by specialization
     public Result getSpecialisedDoc(String profession){
         // I need to get back the doctor id, first, last name, email
         List<Doctor> docSpecList = doctorRepository.findByProfession(profession);
@@ -78,7 +80,7 @@ public class AppointmentsService {
         List<DoctorDTO> docDTOList = new ArrayList<>();
         for (Doctor d: docSpecList){
             System.out.println("Service Data of Doc : " + "i = " + d);
-            docDTOList.add(new DoctorDTO(d.getDocId(),d.getFirstName(), d.getLastName() /*, d.getEmail()*/));  //by using class DoctorDTO
+            docDTOList.add(new DoctorDTO(d.getDocId(),d.getFirstName(), d.getLastName(), d.getPhoneNum(), d.getAddress()));  //by using class DoctorDTO
         }
         System.out.println(">>> Doctor List -> " + docSpecList.isEmpty());
         System.out.println(">>> Doctor DTO List -> " + docDTOList.isEmpty());
@@ -109,7 +111,7 @@ public class AppointmentsService {
 
     public List<Appointments> doctorAppointments(Doctor doctorID) {
         //test print
-        System.out.println("[-***0-AppointmentService] doctorAppointments: id of doctor= " + appointmentRep.findByPatient_PatientId(doctorID.getDocId()));
+        System.out.println("[-***0-AppointmentService] doctorAppointments: id of doctor= " + appointmentRep.findByDoctor_DocId(doctorID.getDocId()));
         //check if id passed as null
         if (doctorID == null){
             System.out.println("[-1-AppointmentService] doctorAppointments: doctorID == " + doctorID);
@@ -187,7 +189,47 @@ public class AppointmentsService {
 //    public Appointments updateAppointment(Appointments appoint){
 //        return appointmentRep.save(appoint);
 //    }
-//
+
+    public List<Appointments> getAppointOnDateSelect(String date, Integer userId, Integer userType){
+        //Maybe it will be needed a parse to LocalDate of the Selected Date
+        System.out.println("[Service] Incoming DocId = " + userId);
+        System.out.println("[Service] Incoming SelectedDate = " + date);
+        System.out.println("[Service] Incoming UserType = " + userType);
+        LocalDate dateFormatted = LocalDate.parse(date);
+        List<Appointments> dateSelectedAppoint = new ArrayList<>();
+
+        try {
+            if (userType == 1){
+                Doctor d = doctorService.getDoctorById(userId);
+                if (d == null){
+                    System.out.println("Error finding Appointments for DocID: " + d.getDocId());
+                    throw new NoSuchElementException("[Appointment Service] Exception occurred! Doctor not found");
+                }
+            } else if (userType == 2) {
+                Patient p = patientService.getPatientById(userId);
+                if (p == null){
+                    System.out.println("Error finding Appointments for PatID: " + p.getPatientId());
+                    throw new NoSuchElementException("[Appointment Service] Exception occurred! Patient not found");
+                }
+            }
+        }catch (Exception e){
+            System.out.println("Handled Exception : " + e.getMessage() + " cause : " + e.getCause());
+        }
+
+        try{
+            System.out.println("Before GET Request");
+            if (userType == 1){
+                dateSelectedAppoint = appointmentRep.findByDateAndDoctor_DocId(dateFormatted, userId);
+            } else if (userType == 2) {
+                dateSelectedAppoint = appointmentRep.findByDateAndPatient_PatientId(dateFormatted, userId); //TODO: create for patient
+            }
+            System.out.println("SUCCESSFUL GET Request");
+        }catch (Exception e){
+            System.out.println("[On Catch Block] Exception Occurred --> " + e);
+        }
+        return dateSelectedAppoint;
+    }
+
     public Result softDeleteAppointment(Integer id){
         if(id.equals(null)) {
             return new Result(0, "Appointment id is null! Retry again");
