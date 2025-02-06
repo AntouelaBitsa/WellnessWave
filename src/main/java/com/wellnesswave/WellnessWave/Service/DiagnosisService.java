@@ -1,6 +1,7 @@
 package com.wellnesswave.WellnessWave.Service;
 
 import com.google.gson.Gson;
+import com.wellnesswave.WellnessWave.Entities.Appointments;
 import com.wellnesswave.WellnessWave.Entities.Diagnosis;
 import com.wellnesswave.WellnessWave.Entities.Doctor;
 import com.wellnesswave.WellnessWave.Entities.Patient;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,7 +34,7 @@ public class DiagnosisService {
     }
 
     public Diagnosis getDiagnById(Integer id){
-        return diagnosisRep.findById(id).orElse(null);
+        return diagnosisRep.findById(id).orElseThrow(()-> new RuntimeException("Diagnosis Not Found."));
     }
 
     public Result createDiagnosis(Diagnosis diagnosis){
@@ -75,11 +78,33 @@ public class DiagnosisService {
         return p;
     }
 
-    public Diagnosis updateDiagn(Diagnosis diagn){
-        return diagnosisRep.save(diagn);
+    public List<Diagnosis> diagnosisOfUser(Integer patId){
+        //test
+        System.out.println("[0 DiagnosisService] diagnosisOfUser: id of patient = " + patId);
+        Patient patientCheck = patientService.getPatientById(patId);
+        //check if id passed as null
+        if (patId == null && patientCheck == null){
+            System.out.println("[1 DiagnosisService] diagnosisOfUser: patientID == " + patId);
+            System.out.println("[2 DiagnosisService] diagnosisOfUser: Incoming PatId daosen't exist or it is null! ");
+            return Collections.emptyList();
+        }
+
+        List<Diagnosis> diagnosisList = new ArrayList<>();
+        //Initialize Appointments List
+        try {
+            diagnosisList = diagnosisRep.findByPatient_PatientId(patId);
+            System.out.println("SUCCESSFUL GET Request");
+        }catch (Exception e){
+            System.out.println("[2 DiagnosisService] diagnosisOfUser: Exception Occurred --> " + e);
+        }
+        return diagnosisList;
     }
 
-    public void deleteDiagn(Integer id){
-        diagnosisRep.deleteById(id);
-    }
+//    public Diagnosis updateDiagn(Diagnosis diagn){
+//        return diagnosisRep.save(diagn);
+//    }
+
+//    public void deleteDiagn(Integer id){
+//        diagnosisRep.deleteById(id);
+//    }
 }
