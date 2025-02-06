@@ -3,12 +3,15 @@ package com.wellnesswave.WellnessWave.Controller;
 import com.wellnesswave.WellnessWave.Entities.Patient;
 import com.wellnesswave.WellnessWave.Service.PatientService;
 import com.wellnesswave.WellnessWave.Utils.Result;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class PatientController {
@@ -46,13 +49,41 @@ public class PatientController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-//    @PostMapping("/updatePatient")
-//    public Patient updatePatient(@PathVariable Patient patient){
-//        return patientService.updatePatient(patient);
+    @PatchMapping("/updatePatient/{id}")
+    public ResponseEntity<Patient> updatePatient(@PathVariable Integer id, @RequestBody Map<String, Object> updatedPatMap){
+        System.out.println("[Controller: Update Patient] Id: " + id + " UpdatedPatient: " + updatedPatMap.toString());
+        Patient updatedPat = patientService.updatePatient(id, updatedPatMap);
+        return new ResponseEntity<>(updatedPat, HttpStatus.OK);
+    }
+
+//    @PostMapping("/deletePatient/{id}")
+//    public ResponseEntity<Result> deletePatient2(@PathVariable("id") Integer id){
+//        boolean patDeleted = patientService.deletePatient2(id);
+//        Result result;
+//        if (!patDeleted){
+//            result = new Result(1, "User not found");
+//            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+//        }
+//        result = new Result(0, "User deleted Successfully");
+//        return new ResponseEntity<>(result, HttpStatus.OK);
 //    }
-//
-//    @DeleteMapping("/deletePatient")
-//    public void deletePatient(@PathVariable Integer id){
-//        patientService.deletePatient(id);
-//    }
+
+    @DeleteMapping("/deletePatient/{id}")
+    public ResponseEntity<Result> deletePatient(@PathVariable Integer id){
+
+        try{
+            patientService.deletePatient(id);
+            System.out.println("[1 - Controller: On pat Deletion] " + "Patient with ID: " + id + " deleted successfully.");
+            Result success = new Result(1, "Patient with ID: " + id + " deleted successfully.");
+            return new ResponseEntity<>(success, HttpStatus.OK);
+        }catch(EntityNotFoundException entityNotFound){
+            System.out.println("[2 - Controller: On pat Deletion] " + "Patient with ID: " + id + " not found.");
+            Result entityNFound = new Result(0, "Patient with ID: " + id + " not found.");
+            return new ResponseEntity<>(entityNFound, HttpStatus.NOT_FOUND);
+        }catch(Exception e){
+            System.out.println("[3 - Controller: On pat Deletion] " + "An error occurred while deleting the patient.");
+            Result exception = new Result(0, "An error occurred while deleting the patient.");
+            return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
