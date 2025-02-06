@@ -30,14 +30,19 @@ public class Doctor {
     private String profession;
     @Column(nullable = false)
     private String docUsername;
-    private int userType;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
+    private int userType;  //TODO: Change type to Integer
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Appointments> docAppointments = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "doc_id", referencedColumnName = "docId")
+    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Diagnosis> docDiagnosis = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<BookedSlots> docBookedSlots = new ArrayList<>();
 
     public Doctor() {
     }
