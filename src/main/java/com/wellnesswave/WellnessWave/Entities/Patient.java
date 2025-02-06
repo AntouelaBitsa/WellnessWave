@@ -27,19 +27,24 @@ public class Patient {
     private String patPassword;
     @Column(nullable = false)
     private String patUsername;
-    private int userType;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
+    private Integer userType;
+
+    //Child Entity
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Appointments> patAppointments = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
+    //Child Entity
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "patient_id", referencedColumnName = "patientId")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Diagnosis> patDiagnosis = new ArrayList<>();
 
     public Patient() {
     }
 
-    public Patient(String firstName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword, String patUsername, int userType) {
+    public Patient(String firstName, String lastName, String phoneNum, String email, String dob, String patAmka, String patPassword, String patUsername, Integer userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
@@ -128,13 +133,14 @@ public class Patient {
         this.patUsername = patUsername;
     }
 
-    public int getUserType() {
+    public Integer getUserType() {
         return userType;
     }
 
-    public void setUserType(int userType) {
+    public void setUserType(Integer userType) {
         this.userType = userType;
     }
+
 
     @Override
     public String toString() {
