@@ -3,6 +3,7 @@ package com.wellnesswave.WellnessWave.Controller;
 import com.wellnesswave.WellnessWave.Entities.Doctor;
 import com.wellnesswave.WellnessWave.Service.DoctorService;
 import com.wellnesswave.WellnessWave.Utils.Result;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@Tag(name = "Doctor")
 public class DoctorController {
     //CRUD Operations Implemenation
     @Autowired

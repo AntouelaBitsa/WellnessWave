@@ -4,6 +4,7 @@ import com.wellnesswave.WellnessWave.Entities.BookedSlots;
 import com.wellnesswave.WellnessWave.Entities.Doctor;
 import com.wellnesswave.WellnessWave.Service.BookedSlotsService;
 import com.wellnesswave.WellnessWave.Utils.Result;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
+@Tag(name = "BookedSlots")
 public class BookedSlotsController {
     @Autowired
     private BookedSlotsService bookedSlotsService;

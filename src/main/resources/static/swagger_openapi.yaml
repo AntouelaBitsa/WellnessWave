@@ -1,0 +1,669 @@
+openapi: "3.0.2"
+info:
+  title: Wellness Wave API Documentation
+  description: API for Thesis Android Project Wellness Wave.
+  version: "1.0"
+servers:
+  - url: http://localhost:8080
+paths:
+  /getAllDoctors:
+    get:
+      summary: Get all Doctors from MySQL DB
+      tags:
+        - Doctor
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Doctor'
+        '500':
+          description: Internal server error
+
+  /getDoctorById/{id}:
+    get:
+      summary: Get a Doctors by ID
+      tags:
+        - Doctor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Doctor'
+
+  /createDoctor:
+    post:
+      summary: Create a Doctor
+      tags:
+        - Doctor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#'#/components/schemas/Doctor'
+      responses:
+        '201':
+          description: Doctor Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '400':
+          description: Invalid Input Data
+        '500':
+          description: Internal server error
+
+  /updateDoctor/{id}:
+    patch:
+      summary: Update Doctor Details
+      tags:
+        - Doctor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Doctor Updated Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '404':
+          description: Doctor Not Found
+        '500':
+          description: Internal server error
+
+  /deleteDoctor/{id}:
+    delete:
+      summary: Delete Doctor
+      tags:
+        - Doctor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Doctor Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '404':
+          description: Doctor Not Found
+        '500':
+          description: Internal server error
+
+  /getAllPatients:
+    get:
+      summary: Get all Patients from MySQL DB
+      tags:
+        - Doctor
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#'#/components/schemas/Patient'
+        '500':
+          description: Internal server error
+
+  /getPatientById/{id}:
+    get:
+      summary: Get a Patient by ID
+      tags:
+        - Patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Patient'
+
+  /createPatient:
+    post:
+      summary: Create a Patient
+      tags:
+        - Patient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#'#/components/schemas/Patient'
+      responses:
+        '201':
+          description: Patient Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '400':
+          description: Invalid Input Data
+        '500':
+          description: Internal server error
+
+  /updatePatient/{id}:
+    patch:
+      summary: Update Patient Details
+      tags:
+        - Patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Patient Updated Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Patient'
+        '404':
+          description: Patient Not Found
+        '500':
+          description: Internal server error
+
+  /deletePatient/{id}:
+    delete:
+      summary: Delete Patient by ID
+      tags:
+        - Patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Patient Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '404':
+          description: Patient Not Found
+        '500':
+          description: Internal server error
+
+  /getAllAppointments:
+    get:
+      summary: Get all Appointments from MySQL DB
+      tags:
+        - Appointments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#'#/components/schemas/Appointments'
+        '500':
+          description: Internal server error
+
+  /getAppointById/{id}:
+    get:
+      summary: Get a Appointments by ID
+      tags:
+        - Appointments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Appointments'
+
+  /createAppointments:
+    post:
+      summary: Create a Appointments
+      tags:
+        - Appointments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#'#/components/schemas/Appointments'
+      responses:
+        '201':
+          description: Appointment Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '400':
+          description: Invalid Input Data
+        '500':
+          description: Internal server error
+
+  /getAppointmentsByPatient/{patientID}:
+    get:
+      summary: Get Appointments by Patient ID
+      tags:
+        - Appointments
+      parameters:
+        - name: patientID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of Appointments for the Patient
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#'#/components/schemas/Appointments'
+        '404':
+          description: Patient Not Found or has no Appointments
+        '500':
+          description: Internal server error
+
+  /getAppointmentsByDoctor/{doctorID}:
+    get:
+      summary: Get Appointments by Doctor ID
+      tags:
+        - Appointments
+      parameters:
+        - name: doctorID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of Appointments for the Doctor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#'#/components/schemas/Appointments'
+        '404':
+          description: Patient Not Found or has no Appointments
+        '500':
+          description: Internal server error
+
+  /deleteAppointment:
+    post:
+      summary: Delete Appointment by ID
+      tags:
+        - Appointments
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: Appointment Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '404':
+          description: Appointments Not Found
+        '500':
+          description: Internal server error
+
+  /getAppointmentsOnDateSelected/{date}/{userId}/{userType}:
+    get:
+      summary: Get appointments for a specific date
+      tags:
+        - Appointments
+      parameters:
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: userType
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of appointments on the selected date
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#'#/components/schemas/Appointments'
+        '404':
+          description: No appointments found for the given date and user
+        '500':
+          description: Internal server error
+
+  /getAllDiagnosis:
+    get:
+      summary: Get all Diagnosis from MySQL DB
+      tags:
+        - Diagnosis
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#'#/components/schemas/Diagnosis'
+        '500':
+          description: Internal server error
+
+  /getDiagnById/{id}:
+    get:
+      summary: Get a Diagnosis by ID
+      tags:
+        - Diagnosis
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Diagnosis'
+
+  /createDiagnosis:
+    post:
+      summary: Create a Appointments
+      tags:
+        - Diagnosis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#'#/components/schemas/Diagnosis'
+      responses:
+        '201':
+          description: Appointment Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Result'
+        '400':
+          description: Invalid Input Data
+        '500':
+          description: Internal server error
+
+  /searchPatByAmka/{patAmka}:
+    get:
+      summary: Search patient by AMKA
+      tags:
+        - Diagnosis
+      parameters:
+        - name: patAmka
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Patient Found
+          content:
+            application/json:
+              schema:
+                $ref: '#'#/components/schemas/Patient'
+        '404':
+          description: Patient Not Found
+
+  /getListOfDiagnosisByPatient/{patId}:
+    get:
+      summary: Get list of diagnoses for a patient
+      tags:
+        - Diagnosis
+      parameters:
+        - name: patId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of diagnoses for the patient
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#'#/components/schemas/Patient'
+        '404':
+          description: No diagnoses found for the given patient ID
+
+components:
+  schemas:
+    Doctor:
+      type: object
+      properties:
+        docId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+          nullable: false
+        lastName:
+          type: string
+          nullable: false
+        password:
+          type: string
+          nullable: false
+        phoneNum:
+          type: string
+          nullable: false
+        email:
+          type: string
+          format: email
+          nullable: false
+        amka:
+          type: string
+          nullable: false
+        address:
+          type: string
+          nullable: false
+        profession:
+          type: string
+          nullable: false
+        docUsername:
+          type: string
+          nullable: false
+        userType:
+          type: integer
+        docAppointments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Appointments'
+        docDiagnosis:
+          type: array
+          items:
+            $ref: '#/components/schemas/Diagnosis'
+        docBookedSlots:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookedSlot'
+
+    Patient:
+      type: object
+      properties:
+        patientId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+          nullable: false
+        lastName:
+          type: string
+          nullable: false
+        phoneNum:
+          type: string
+          nullable: false
+        email:
+          type: string
+          format: email
+          nullable: false
+        dob:
+          type: string
+          format: date
+          nullable: false
+        patAmka:
+          type: string
+          nullable: false
+        patPassword:
+          type: string
+          nullable: false
+        patUsername:
+          type: string
+          nullable: false
+        userType:
+          type: integer
+        patientAppointments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Appointments'
+        patientDiagnosis:
+          type: array
+          items:
+            $ref: '#/components/schemas/Diagnosis'
+
+    Appointments:
+      type: object
+      properties:
+        appointmentId:
+          type: integer
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          format: time
+        appointInfo:
+          type: string
+        status:
+          type: string
+        doctor:
+          $ref: '#/components/schemas/Doctor'
+        patient:
+          $ref: '#/components/schemas/Patient'
+
+    Diagnosis:
+      type: object
+      properties:
+        diagnosisId:
+          type: integer
+        diagnType:
+          type: string
+          nullable: false
+        treatment:
+          type: string
+        treatmDose:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        diagnInfo:
+          type: string
+          nullable: false
+        doctor:
+          $ref: '#/components/schemas/Doctor'
+        patient:
+          $ref: '#/components/schemas/Patient'
+
+    BookedSlot:
+      type: object
+      properties:
+        slotId:
+          type: integer
+        slotDate:
+          type: string
+          format: date
+          nullable: false
+        slotTime:
+          type: string
+          format: time
+          nullable: false
+        doctor:
+          $ref: '#/components/schemas/Doctor'
+
+    Result:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
