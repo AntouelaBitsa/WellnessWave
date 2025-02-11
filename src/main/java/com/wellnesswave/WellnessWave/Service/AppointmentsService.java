@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+
+import static com.wellnesswave.WellnessWave.Entities.Appointments.filterAndSortAppointments;
 
 @Service
 public class AppointmentsService {
@@ -80,7 +79,7 @@ public class AppointmentsService {
         List<DoctorDTO> docDTOList = new ArrayList<>();
         for (Doctor d: docSpecList){
             System.out.println("Service Data of Doc : " + "i = " + d);
-            docDTOList.add(new DoctorDTO(d.getDocId(),d.getFirstName(), d.getLastName(), d.getPhoneNum(), d.getAddress()));  //by using class DoctorDTO
+            docDTOList.add(new DoctorDTO(d.getDocId(),d.getFirstName(), d.getLastName(), d.getPhoneNum(), d.getAddress(), d.getProfession()));  //by using class DoctorDTO
         }
         System.out.println(">>> Doctor List -> " + docSpecList.isEmpty());
         System.out.println(">>> Doctor DTO List -> " + docDTOList.isEmpty());
@@ -90,7 +89,14 @@ public class AppointmentsService {
         return new Result(0, message);
     }
 
+
+    /**
+     * Searches for Patient appointments based on ID
+     * @param patientID is the patient ID, which is foreign key
+     * @return a filtered and sorted list of appointments: filtered from today and after & sorted by date and time
+     */
     public List<Appointments> patientAppointments(Patient patientID){
+        List<Appointments> activeAppointments = new ArrayList<>();
         //test
         System.out.println("[-***0-AppointmentService] patientAppointments: id of patient= " + appointmentRep.findByPatient_PatientId(patientID.getPatientId()));
         //check if id passed as null
@@ -101,94 +107,88 @@ public class AppointmentsService {
 
         //Initialize Appointments List
         List<Appointments> appList = appointmentRep.findByPatient_PatientId(patientID.getPatientId());
+        for (Appointments app: appList){
+            if (app.getStatus().equals("active") || app.getStatus().equals("rescheduled")){
+                System.out.println("[DEBUG] app.getStatus() = " + app.getStatus() + " for app ID: " + app.getAppointmentId());
+                activeAppointments.add(app);
+            }
+        }
+
+        List<Appointments> filteredAppoints = filterAndSortAppointments(activeAppointments);
+        System.out.println("[Appoint Service] active appointments sorted: " + filteredAppoints);
+
         try {
             System.out.println("SUCCESSFUL GET Request");
         }catch (Exception e){
             System.out.println("[-2-AppointmentService] patientAppointments: Exception Occurred= " + e);
         }
-        return appList;
+
+        System.out.println("[Appoint Service] Active Appointments List: " + filteredAppoints);
+        return filteredAppoints;
     }
 
+    /**
+     * Searches for Doctor appointments based on ID
+     * @param doctorID is the doctor ID, which is foreign key
+     * @return a filtered and sorted list of appointments: filtered from today and after & sorted by date and time
+     */
     public List<Appointments> doctorAppointments(Doctor doctorID) {
-        //test print
+        List<Appointments> activeAppointments = new ArrayList<>();
+
+        /** Test Print */
         System.out.println("[-***0-AppointmentService] doctorAppointments: id of doctor= " + appointmentRep.findByDoctor_DocId(doctorID.getDocId()));
-        //check if id passed as null
+
+        /** Condition Check for NULL ID */
         if (doctorID == null){
             System.out.println("[-1-AppointmentService] doctorAppointments: doctorID == " + doctorID);
             return Collections.emptyList();
         }
 
-        //Initialize Appointments List: get today's and tomorrow's appointments
-        /*List<Appointments> tempDocAppoint = appointmentRep.findByDoctor_DocId(doctorID.getDocId());
-        List<Appointments> docAppList = new ArrayList<>();
-        LocalDate currentDate = LocalDate.now();
-        for (Appointments appoint: tempDocAppoint){
-            LocalDate appointDate = appoint.getDate();
-            if (appointDate.isAfter(currentDate)){
-                docAppList.add(appoint);
-            }
-        }
-        System.out.println("SOS - UPCOMING APPOINT: " + docAppList);*/
-
-        List<Appointments> docAppList = appointmentRep.findByDoctor_DocId(doctorID.getDocId());
-
         try {
+            List<Appointments> docAppList = appointmentRep.findByDoctor_DocId(doctorID.getDocId());
+
+            /** Filtering active or rescheduled appointments */
+            for (Appointments app: docAppList){
+                if (app.getStatus().equals("active") || app.getStatus().equals("rescheduled")){
+                    System.out.println("[DEBUG] app.getStatus() = " + app.getStatus() + " for app ID: " + app.getAppointmentId());
+                    activeAppointments.add(app);
+                }
+            }
+
+            /** Filtering for appointments from today and after &
+             * Sorting appointments by date and time */
+            filterAndSortAppointments(activeAppointments);
+            System.out.println("[Appoint Service] active appointments sorted: " + activeAppointments);
+
             System.out.println("SUCCESSFUL GET Request");
         }catch (Exception e){
             System.out.println("[-2-AppointmentService] doctorAppointments: Exception Occurred= " + e);
         }
-        return docAppList;
+        return activeAppointments;
     }
 
-    /*private Appointments nextAppFromList(Doctor docID){
-        //List of appointments in carousel
-        List<Appointments> tempDocAppoint = appointmentRep.findByDoctor_DocId(docID.getDocId());
-        //Filtered list with today's and tomorrow's appointments
-        List<Appointments> docAppList = new ArrayList<>();
-        LocalDate currentDate = LocalDate.now();
-//        LocalDate nextDate = LocalDate.
-        for (Appointments appoint: tempDocAppoint){
-            LocalDate appointDate = appoint.getDate();
-            if (appointDate.isAfter(currentDate) || appointDate.equals(currentDate)){
-                docAppList.add(appoint);
+
+    /**
+     * Updates existing appointment's status
+     * @param id is for appointment ID
+     * @param status is the changed status of the appointment -> status = "canceled"
+     * @return a Result object for successful request (0) or not (1)
+     */
+    public Result updateStatusOnReschedule(Integer id, String status){
+        Appointments existingAppoint = appointmentRep.findByAppointmentId(id);
+
+        try{
+
+            if (existingAppoint.getStatus().equals("active")){
+                existingAppoint.setStatus(status);
             }
+            appointmentRep.save(existingAppoint);
+            return new Result(0, "Status of Appointment updated");
+
+        }catch (Exception e) {
+            return new Result(1, "Status of Appointment didn't update.");
         }
-        System.out.println("SOS - UPCOMING APPOINT: " + docAppList);
-        //Sorted Appointments list from database
-        Collections.sort(docAppList, new Comparator<Appointments>() {
-            @Override
-            public int compare(Appointments appoint1, Appointments appoint2) {
-                return appoint1.getTime().compareTo(appoint2.getTime());
-            }
-        });
-
-        Appointments nextAppoint = new Appointments();
-
-        return nextAppoint;
     }
-
-    public Appointments getNextAppoint(Appointments appID){
-        //test print
-        System.out.println("[-***0-AppointmentService] doctorAppointments: id of doctor= " + appointmentRep.findByPatient_PatientId(appID.getAppointmentId()));
-        //check if id passed as null
-        if (appID == null){
-            System.out.println("[-1-AppointmentService] doctorAppointments: doctorID == " + appID);
-            return new Appointments();
-        }
-//        Integer nextAppoint = appID.getAppointmentId();
-        Appointments docAppList = appointmentRep.findByAppointmentId(appID.getAppointmentId());
-
-        try {
-            System.out.println("SUCCESSFUL GET Request");
-        }catch (Exception e){
-            System.out.println("[-2-AppointmentService] doctorAppointments: Exception Occurred= " + e);
-        }
-        return docAppList;
-    }*/
-
-//    public Appointments updateAppointment(Appointments appoint){
-//        return appointmentRep.save(appoint);
-//    }
 
     public List<Appointments> getAppointOnDateSelect(String date, Integer userId, Integer userType){
         //Maybe it will be needed a parse to LocalDate of the Selected Date
@@ -197,6 +197,7 @@ public class AppointmentsService {
         System.out.println("[Service] Incoming UserType = " + userType);
         LocalDate dateFormatted = LocalDate.parse(date);
         List<Appointments> dateSelectedAppoint = new ArrayList<>();
+        List<Appointments> activeAppointments = new ArrayList<>();
 
         try {
             if (userType == 1){
@@ -224,10 +225,19 @@ public class AppointmentsService {
                 dateSelectedAppoint = appointmentRep.findByDateAndPatient_PatientId(dateFormatted, userId); //TODO: create for patient
             }
             System.out.println("SUCCESSFUL GET Request");
+
+            /** Filtering active or rescheduled appointments */
+            for (Appointments app: dateSelectedAppoint){
+                if (app.getStatus().equals("active") || app.getStatus().equals("rescheduled")){
+                    System.out.println("[DEBUG] app.getStatus() = " + app.getStatus() + " for app ID: " + app.getAppointmentId());
+                    activeAppointments.add(app);
+                }
+            }
+
         }catch (Exception e){
             System.out.println("[On Catch Block] Exception Occurred --> " + e);
         }
-        return dateSelectedAppoint;
+        return activeAppointments;
     }
 
     public Result softDeleteAppointment(Integer id){
