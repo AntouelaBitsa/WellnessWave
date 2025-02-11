@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,11 +61,14 @@ public class BookedSlotsService {
     }
 
     //TODO: save slot being booked
-    public Result createSlot(BookedSlots bookedSlot, Integer docId){
+    public Result createSlot(BookedSlots bookedSlot){
+        Doctor doc = doctorService.getDoctorById(bookedSlot.getDoctor().getDocId());
+        System.out.println("Doctor returned: " + doc);
+
         LocalDate newDate = bookedSlot.getSlotDate();
         LocalTime newSlotTime = bookedSlot.getSlotTime();
 
-        List<BookedSlots> docSlots = bookedSlotsRepository.findAllBySlotDateAndDoctor_DocId(newDate, docId);
+        List<BookedSlots> docSlots = bookedSlotsRepository.findAllBySlotDateAndDoctor_DocId(newDate, bookedSlot.getDoctor().getDocId());
         boolean isSlotBooked = docSlots.stream()
                 .anyMatch(slot -> slot.getSlotTime().equals(newSlotTime));
 
@@ -72,8 +76,7 @@ public class BookedSlotsService {
             return new Result(1, "The Selected Time slot is already booked.");
         }
 
-        Doctor doc = doctorService.getDoctorById(docId);
-        System.out.println("Doctor returned: " + doc);
+
 
         bookedSlot.setDoctor(doc);
         BookedSlots newSlot = bookedSlotsRepository.save(bookedSlot);
@@ -117,30 +120,4 @@ public class BookedSlotsService {
             return new Result(1, "Slot not found for the specified date and doctor.");
         }
     }
-
-
-//    public Result createSlot(BookedSlots slot){
-//        System.out.println("[BookedSlotService 01 createSlot()] slot: " + slot);
-//        if (slot.equals(null) || slot == null){
-//            System.out.println("[BookedSlotService 02 createSlot()] slot is null");
-//            return new Result(1, "Slot is empty or null");
-//        }
-//
-//        if (appointmentsService.getAppointById(slot.getAppointments().getAppointmentId()) == null){
-//            System.out.println("[BookedSlotService 03 createSlot()] slot's appointment is null");
-//            return new Result(1, "Slot has no Appointment Assigned");
-//        }
-//        slot.setAppointments(slot.getAppointments());
-//        System.out.println("[BookedSlotService 03 createSlot()] slot's appointment: " + slot.getAppointments());
-//
-//        try {
-//            BookedSlots bookingSlot = bookedSlotsRepository.save(slot);
-//            System.out.println("[BookedSlotService 04 createSlot()] try{(response)} bookingSlot: " + bookingSlot);
-//            return new Result(0, "Slot is booked successfully");
-//        }catch (Exception e){
-//            System.out.println("[BookedSlotService 05 createSlot()] catch{exception occurred} exception: " + e.getMessage() +
-//                    " cause: " + e.getCause());
-//            return new Result(1, "An exception occurred during slot booking");
-//        }
-//    }
 }
