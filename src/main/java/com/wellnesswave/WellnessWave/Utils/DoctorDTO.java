@@ -9,14 +9,16 @@ public class DoctorDTO {
     private String email;
     private String phoneNum;
     private String address;
+    private String profession;
 
 
-    public DoctorDTO(Integer docId, String firstName, String lastName, String phoneNum, String address) {
+    public DoctorDTO(Integer docId, String firstName, String lastName, String phoneNum, String address, String profession) {
         this.docId = docId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.address = address;
+        this.profession = profession;
     }
 
     public Integer getDocId() {
