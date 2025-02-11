@@ -70,6 +70,7 @@ public class DiagnosisService {
         }
 
         Patient p = patientRepository.findByPatAmka(patAmka);
+
         try {
             System.out.println("[Dgn Service 1: getPatientByAmka] -> p.toString(): " + p.toString());
         }catch (Exception e){
