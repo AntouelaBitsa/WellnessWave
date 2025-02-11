@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="appointments")
@@ -19,15 +23,11 @@ public class Appointments {
     private String appointInfo;
 
     //Foreign key - Parent
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "doc_id")
     @ManyToOne(optional = false)
     @JoinColumn(name = "doc_id", nullable = false)
     private Doctor doctor;
 
     //Foreign Key - Parent
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "patient_id")
     @ManyToOne(optional = false)
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
@@ -36,13 +36,32 @@ public class Appointments {
     public Appointments() {
     }
 
-    public Appointments(LocalDate date, LocalTime time, String appointInfo, Doctor doctor, Patient patient) {
+    public Appointments(LocalDate date, LocalTime time, String appointInfo, Doctor doctor, Patient patient, String status) {
         this.date = date;
         this.time = time;
         this.appointInfo = appointInfo;
         this.doctor = doctor;
         this.patient = patient;
+        this.status = status;
         System.out.println(">>> Appointment Controller doc address : " + doctor.getAddress());
+    }
+
+    public static List<Appointments> filterAndSortAppointments(List<Appointments> appointList){
+        LocalDate today = LocalDate.now();
+
+        // Filter appointments: Keep only those with date >= today
+        List<Appointments> filteredAppointments = appointList.stream()
+                .filter(appointments -> !appointments.getDate().isBefore(today))
+                        .collect(Collectors.toList());
+
+        // Sort by date first, then by time
+        Collections.sort(filteredAppointments, Comparator
+                .comparing(Appointments::getDate)
+                .thenComparing(Appointments::getTime));
+
+        // Print sorted appointments
+        System.out.println("[Appointments Entity] Sorted Appointments List: " + filteredAppointments);
+        return filteredAppointments;
     }
 
     public Integer getAppointmentId() {
@@ -110,6 +129,7 @@ public class Appointments {
                 ", appointInfo='" + appointInfo + '\'' +
                 ", doctor=" + doctor +
                 ", patient=" + patient +
+                ", status=" + status +
                 '}';
     }
 
