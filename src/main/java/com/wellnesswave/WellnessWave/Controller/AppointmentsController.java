@@ -63,6 +63,12 @@ public class AppointmentsController {
         return new ResponseEntity<>(docAppointList, HttpStatus.OK);
     }
 
+    @PostMapping("/updateAppointOnReschedule")
+    public ResponseEntity<Result> updateAppointOnReschedule(@RequestParam("id") Integer id, @RequestParam("status") String status){
+        Result responseResult = appointService.updateStatusOnReschedule(id, status);
+        return new ResponseEntity<>(responseResult, HttpStatus.OK);
+    }
+
 //    @PostMapping("/updateAppointment")
 //    public Appointments updateAppointment(@PathVariable Appointments appoint){
 //        return appointService.updateAppointment(appoint);
