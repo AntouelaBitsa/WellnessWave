@@ -1,8 +1,8 @@
 package com.wellnesswave.WellnessWave.Controller;
 
 import com.wellnesswave.WellnessWave.Entities.BookedSlots;
-import com.wellnesswave.WellnessWave.Entities.Doctor;
 import com.wellnesswave.WellnessWave.Service.BookedSlotsService;
+import com.wellnesswave.WellnessWave.Utils.BookedSlotsDTO;
 import com.wellnesswave.WellnessWave.Utils.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +30,7 @@ public class BookedSlotsController {
     //TODO: endpoint to find slots by date and docId
     @GetMapping("/getBookedSlotsByDate/{date}/{docId}")
     public ResponseEntity<Map<String, Set<String>>> getBookedSlotsByDate(@PathVariable String date, @PathVariable Integer docId){
-        Map<String, Set<String>> bookedSlotsMap = bookedSlotsService.bookedSlotsByDate(date, docId);
+        Map<String, Set<String>> bookedSlotsMap = (Map<String, Set<String>>) bookedSlotsService.bookedSlotsByDate(date, docId);
         System.out.println("[BookedSlotController 01] date: " + date);
         System.out.println("[BookedSlotController 02] getBookedSlotsByDate(): call to service class");
         System.out.println("[BookedSlotController 03] (response) bookedSlotsList: " + bookedSlotsMap);
@@ -40,9 +38,9 @@ public class BookedSlotsController {
     }
 
     //TODO: endpoint to save slot being booked
-    @PostMapping("/createSlot/{docId}")
-    public ResponseEntity<Result> createSlot(@RequestBody BookedSlots slot, @PathVariable Integer docId){
-        Result slotResult = bookedSlotsService.createSlot(slot, docId);
+    @PostMapping("/createSlot")
+    public ResponseEntity<Result> createSlot(@RequestBody BookedSlots slot){
+        Result slotResult = bookedSlotsService.createSlot(slot);
         System.out.println("[BookedSlotController 01 bookSlot()] slot: " + slot);
         System.out.println("[BookedSlotController 01 bookSlot()] slotResult: " + slotResult);
         if (slotResult.getStatus() == 1){
