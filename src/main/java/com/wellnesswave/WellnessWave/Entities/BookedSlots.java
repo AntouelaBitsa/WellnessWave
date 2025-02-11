@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "booked_slots", uniqueConstraints = @UniqueConstraint(columnNames = {"date", "time", "doc_id"}))
@@ -22,12 +23,6 @@ public class BookedSlots {
     @ManyToOne(optional = false)
     @JoinColumn(name = "doc_id", nullable = false)
     private Doctor doctor;
-
-    //TODO: add foreign key of appointment id
-//    @OneToOne(optional = true)
-//    @JoinColumn(name = "appointment_id", nullable = false, unique = true)
-//    private Appointments appointments;
-
 
     public BookedSlots() {
     }
@@ -66,13 +61,6 @@ public class BookedSlots {
     public void setSlotTime(LocalTime slotTime) {
         this.slotTime = slotTime;
     }
-
-//    public Appointments getAppointments() {
-//        return appointments;
-//    }
-//    public void setAppointments(Appointments appointments) {
-//        this.appointments = appointments;
-//    }
 
     public Doctor getDoctor() {
         return doctor;
