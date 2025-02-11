@@ -16,6 +16,7 @@ public class UserSession {
     private String address;
     private String profession;
     private String patDob;
+    private String patAmka;
 //    private String dob;
     private int userType;
 
@@ -49,6 +50,7 @@ public class UserSession {
             this.username = p.getPatUsername();
             this.email = p.getEmail();
             this.phoneNum = p.getPhoneNum();
+            this.patAmka = p.getPatAmka();
             this.patDob = p.getDob();
             this.userType = p.getUserType(); //code for patient = 2
         }catch (Exception e){
@@ -92,6 +94,7 @@ public class UserSession {
                 "\"patUsername\": \"" + username + "\"," +
                 "\"email\": \"" + email + "\"," +
                 "\"phoneNum\": \"" + phoneNum + "\"," +
+                "\"patAmka\": \"" + patAmka + "\"," +
                 "\"dob\": \"" + patDob + "\"," +
                 "\"userType\": \"" + userType + "\"" +
                 "}";
@@ -144,5 +147,9 @@ public class UserSession {
 
     public String getPatDob() {
         return patDob;
+    }
+
+    public String getPatAmka() {
+        return patAmka;
     }
 }
